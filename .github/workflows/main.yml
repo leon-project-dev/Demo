@@ -25,10 +25,14 @@ jobs:
 
       - name: Run pwd
         run: pwd
+      
       - uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '6.0.x'
           include-prerelease: true
+      
+      - name: Run Dot Version
+        run: dotnet --info
       # Runs a single command using the runners shell
       - name: build
         run: dotnet msbuild
