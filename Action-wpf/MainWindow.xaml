@@ -12,5 +12,8 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Background="Aquamarine"></Grid>
+        <Grid Grid.Column="1" Background="Black"></Grid>
+        <Grid Grid.Column="2" Background="Gainsboro"></Grid>
     </Grid>
 </Window>
