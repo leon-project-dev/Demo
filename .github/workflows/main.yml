@@ -63,13 +63,26 @@ jobs:
       # TODO:Deploy  
       #- name: delpoy server
 
+      - name: Dump GitHub context
+        id: github_context_step
+        run: echo '${{ toJSON(github) }}'
+      - name: Dump job context
+        run: echo '${{ toJSON(job) }}'
+      - name: Dump steps context
+        run: echo '${{ toJSON(steps) }}'
+      - name: Dump runner context
+        run: echo '${{ toJSON(runner) }}'
+      - name: Dump strategy context
+        run: echo '${{ toJSON(strategy) }}'
+      - name: Dump matrix context
+        run: echo '${{ toJSON(matrix) }}'
 
-      - name: notify success
-        uses: tokorom/action-slack-incoming-webhook@main
-        env:
-             INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        with:
-             text: "actor: ${{github.actor}} head_ref: ${{github.head_ref}}, ref_name: ${{github.ref_name}} env: ${{github.env}} build success, pack url: http://www.baidu.com"
+      #- name: notify success
+      #  uses: tokorom/action-slack-incoming-webhook@main
+      #  env:
+      #       INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #  with:
+      #       text: "actor: ${{github.actor}} head_ref: ${{github.head_ref}}, ref_name: ${{github.ref_name}} env: ${{github.env}} build success, pack url: http://www.baidu.com"
        
 
             # blocks: |
