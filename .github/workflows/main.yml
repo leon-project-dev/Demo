@@ -41,13 +41,12 @@ jobs:
         with:
              text: "build failte, pleace check code, build log url: https://github.com/leon-project-dev/Demo/suites/7073840480/artifacts/279264187"
         if: failure()
-
-      #- name: upload log
-      #- uses: actions/upload-artifact@v3
-      #  with:
-      #      name: log
-      #      path: log.txt
-      #  if: always()
+        
+      - uses: actions/upload-artifact@v3
+        with:
+            name: log
+            path: log.txt
+        if: always()
       
       - name: publish
         run: dotnet publish -c Release -o pub\
