@@ -23,42 +23,42 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:      
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      #- uses: actions/checkout@v3
       
-      - name: clean
-        run: dotnet clean
+      #- name: clean
+      #  run: dotnet clean
       
-      - name: Install dependencies
-        run: dotnet restore
+      #- name: Install dependencies
+      #  run: dotnet restore
 
-      - name: build
-        run: dotnet msbuild >> log.txt
+      #- name: build
+      #  run: dotnet msbuild >> log.txt
       
-      - name: notify build failure
-        uses: tokorom/action-slack-incoming-webhook@main
-        env:
-             INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        with:
-             text: "build failte, pleace check code, build log url: https://github.com/leon-project-dev/Demo/suites/7073840480/artifacts/279264187"
-        if: failure()
+      #- name: notify build failure
+      #  uses: tokorom/action-slack-incoming-webhook@main
+      #  env:
+      #       INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #  with:
+      #       text: "build failte, pleace check code, build log url: https://github.com/leon-project-dev/Demo/suites/7073840480/artifacts/279264187"
+      #  if: failure()
         
-      - uses: actions/upload-artifact@v3
-        with:
-            name: log
-            path: log.txt
-        if: always()
+      #- uses: actions/upload-artifact@v3
+      #  with:
+      #      name: log
+      #      path: log.txt
+      #  if: always()
       
-      - name: publish
-        run: dotnet publish -c Release -o pub\
+      #- name: publish
+      #  run: dotnet publish -c Release -o pub\
 
-      - uses: actions/upload-artifact@v3
-        with:
-            name: package
-            path: pub\
+      #- uses: actions/upload-artifact@v3
+      #  with:
+      #      name: package
+      #      path: pub\
 
-      # zip
-      - name: zip 
-        run: Compress-Archive -Path .\pub 'pub.zip'
+      ## zip
+      #- name: zip 
+      #  run: Compress-Archive -Path .\pub 'pub.zip'
         
       # TODO:Deploy  
       #- name: delpoy server
@@ -69,7 +69,7 @@ jobs:
         env:
              INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
-             text: "${{github.actor}} build success, pack url: http://www.baidu.com"
+             text: "actor: ${{github.actor}} head_ref: ${{github.head_ref}}, ref_name: ${{github.ref_name}} env: ${{github.env}} build success, pack url: http://www.baidu.com"
        
 
             # blocks: |
