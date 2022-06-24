@@ -34,8 +34,13 @@ jobs:
       - name: build
         run: dotnet msbuild
       
-      #- name: publish
-      #  run: dotnet publish -c Release /p:PublishProfile="CustomProfile" /p:Password=xxxxx /p:AllowUntrustedCertificate=true
+      - name: publish
+        run: dotnet publish -c Release -o pub\
+
+      - uses: actions/upload-artifact@v3
+        with:
+            name: upload to server s
+            path: pub\
 
       # notify slack 
       #- name: Slack Notification
