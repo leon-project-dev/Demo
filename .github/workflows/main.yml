@@ -48,6 +48,13 @@ jobs:
             SLACK_TITLE: Post Title
             SLACK_USERNAME: rtCamp
             SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+       
+      - name: Slack Notification
+        uses: tokorom/action-slack-incoming-webhook@main
+        env:
+            INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+             text: Hello, Slack!
      
       
       
