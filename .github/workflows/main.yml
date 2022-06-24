@@ -32,9 +32,8 @@ jobs:
         run: dotnet restore
 
       - name: build
-        run: dotnet msbuild >> log.txt
+        run: dotnet msbuild
       
-        
       - name: notify build failure
         uses: tokorom/action-slack-incoming-webhook@main
         env:
@@ -43,12 +42,12 @@ jobs:
              text: "build failte, pleace check code, build log url: https://github.com/leon-project-dev/Demo/suites/7073840480/artifacts/279264187"
         if: failure()
 
-      - name: upload log
-      - uses: actions/upload-artifact@v3
-        with:
-            name: log
-            path: log.txt
-        if: always()
+      #- name: upload log
+      #- uses: actions/upload-artifact@v3
+      #  with:
+      #      name: log
+      #      path: log.txt
+      #  if: always()
       
       - name: publish
         run: dotnet publish -c Release -o pub\
