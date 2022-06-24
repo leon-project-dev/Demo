@@ -60,7 +60,7 @@ jobs:
       - name: zip 
         run: Compress-Archive -Path .\pub 'pub.zip'
         
-      # Deploy 
+      # TODO:Deploy  
       #- name: delpoy server
 
 
@@ -69,7 +69,7 @@ jobs:
         env:
              INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
-             text: "build success, pack url: https://github.com/leon-project-dev/Demo/suites/7073840480/artifacts/279264187"
+             text: "${{github.actor}} build success, pack url: http://www.baidu.com"
        
 
             # blocks: |
