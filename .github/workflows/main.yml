@@ -28,6 +28,9 @@ jobs:
       - name: clean
         run: dotnet clean
       
+      - name: Install dependencies
+        run: dotnet restore
+
       - name: build
         run: dotnet msbuild
 
