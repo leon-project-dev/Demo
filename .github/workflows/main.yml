@@ -21,7 +21,7 @@ jobs:
     runs-on: windows-latest    
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
+    steps:      
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       
@@ -56,6 +56,14 @@ jobs:
         with:
             name: package
             path: pub\
+
+      # zip
+      - name: zip 
+        run: Compress-Archive -Path .\pub 'pub.zip'
+        
+      # Deploy 
+      #- name: delpoy server
+
 
       - name: notify success
         uses: tokorom/action-slack-incoming-webhook@main
