@@ -32,7 +32,7 @@ jobs:
         run: dotnet restore
 
       - name: build
-        run: dotnet msbuild >> log.txt
+        run: dotnet msbuild
       
       - name: notify build failure
         uses: tokorom/action-slack-incoming-webhook@main
