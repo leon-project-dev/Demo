@@ -7,7 +7,7 @@ on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]   
-    paths-ignore: ["*.txt","*.md", "LICENSE", "*.xmind", "*.doc", "*.docx", "*.yml", "*.ymal"]
+    paths-ignore: ["**/*.txt","**/*.md", "LICENSE", "**/*.xmind", "**/*.doc", "**/*.docx", "**/*.yml", "**/*.ymal"]
   
 
   # Allows you to run this workflow manually from the Actions tab
@@ -34,32 +34,31 @@ jobs:
       - name: build
         run: dotnet msbuild
       
+        if: failure()
+      - name: notify build failure
+        uses: tokorom/action-slack-incoming-webhook@main
+        env:
+             INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+             text: "build failte, pleace check code"
+        
+      
       - name: publish
         run: dotnet publish -c Release -o pub\
 
       - uses: actions/upload-artifact@v3
         with:
-            name: upload to server s
+            name: upload to server
             path: pub\
 
-      # notify slack 
-      #- name: Slack Notification
-      #  uses: rtCamp/action-slack-notify@v2
-      #  env:
-      #      SLACK_CHANNEL: general
-      #      SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-      #      SLACK_ICON: https://github.com/rtCamp.png?size=48
-      #      SLACK_MESSAGE: 'Post Content :rocket:'
-      #      SLACK_TITLE: Post Title
-      #      SLACK_USERNAME: rtCamp
-      #      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-       
-      - name: Slack Notification
+      - name: notify success
         uses: tokorom/action-slack-incoming-webhook@main
         env:
-            INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+             INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
-             text: ${{ toJSON(github.event.release.body) }}!             
+             text: "build success, download url: http://www.baidui.com"
+       
+
             # blocks: |
             # [
             #  {
