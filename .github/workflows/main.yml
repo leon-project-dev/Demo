@@ -51,7 +51,12 @@ jobs:
       - name: publish
         run: dotnet publish -c Release -o pub\
       
-      - name: 9. ´´½¨GitHub Release
+      - uses: actions/upload-artifact@v3
+        with:
+            name: package
+            path: pub\
+
+      - name: GitHub Release
         id: create_release
         uses: actions/create-release@latest
         env:
@@ -63,10 +68,7 @@ jobs:
           draft: false
           prerelease: false
 
-      #- uses: actions/upload-artifact@v3
-      #  with:
-      #      name: package
-      #      path: pub\
+      
 
       ## zip
       #- name: zip 
