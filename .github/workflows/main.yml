@@ -82,24 +82,25 @@ jobs:
             path: pub/
 
       - name: deploy file to server
-        uses: wangyucode/sftp-upload-action@v1.3.2 
+        uses: Creepios/sftp-action@v1.0.3
         with:  
           username: '${{ secrets.FILE_SERVER_USER_NAME }}'  
           host: '${{ secrets.FILE_SERVER_IP }}'
           port: '${{ secrets.FILE_SERVER_PORT }}'
           password: ${{ secrets.FILE_SERVER_USER_PWD }} 
-          localDir: './pub/*'  
-          remoteDir: '/'
+          localPath: './pub/*'  
+          remotePath: '/'
 
+      #    uses: Creepios/sftp-action@v1.0.3
+      #with:
+      #  host: '127.0.0.1'
+      #  port: 22
+      #  username: 'root'
+      #  password: 'password'
+      #  localPath: './dist/index.js'
+      #  remotePath: './'
        
-  #         host: 'example.com',                  # Required.
-  #port: 22,                             # Optional, Default to 22.
-  #username: 'user',                     # Required.
-  #password: 'password',                 # Optional.
-
-  # localDir: 'dist',                     # Required, Absolute or relative to cwd.
-  #remoteDir: '/path/to/dest'  
-
+   
       #- name: GitHub Release
       #  id: create_release
       #  uses: actions/create-release@latest
