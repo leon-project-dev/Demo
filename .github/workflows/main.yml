@@ -90,6 +90,7 @@ jobs:
           password: ${{ secrets.FILE_SERVER_USER_PWD }} 
           localPath: './pub/*'  
           remotePath: '/'
+          agent: ''
 
       #    uses: Creepios/sftp-action@v1.0.3
       #with:
