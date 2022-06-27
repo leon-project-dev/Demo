@@ -71,10 +71,13 @@ jobs:
       #      path: log.txt
       #  if: always()
       
+      - name: pwd
+        run: Dir
+
       - uses: actions/upload-artifact@v3
         with:
             name: package
-            path: ./pub/
+            path: pub/
 
       - name: deploy file to server
         uses: wlixcc/SFTP-Deploy-Action@v1.0 
