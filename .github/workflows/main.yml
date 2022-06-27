@@ -82,23 +82,20 @@ jobs:
             path: pub/
 
       - name: deploy file to server
-        uses: Creepios/sftp-action@v1.0.3
-        with:  
-          username: 'Leon'#'${{ secrets.FILE_SERVER_USER_NAME }}'  
-          host: '192.168.5.61'#'${{ secrets.FILE_SERVER_IP }}'
-          port: '8090'#'${{ secrets.FILE_SERVER_PORT }}'
-          password: 'aP75OiKHAM76woYs'#${{ secrets.FILE_SERVER_USER_PWD }} 
-          localPath: './pub/*'  
-          remotePath: '/'          
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:            
+          server: ${{ secrets.FILE_SERVER_IP }}'
+          port: ${{ secrets.FILE_SERVER_PORT }}'
+          protocol: ftps
+          username: ${{ secrets.FILE_SERVER_USER_NAME }}'  
+          password: ${{ secrets.FILE_SERVER_USER_PWD }} 
+          localPath: './pub/*'                   
 
-      #    uses: Creepios/sftp-action@v1.0.3
-      #with:
-      #  host: '127.0.0.1'
-      #  port: 22
-      #  username: 'root'
-      #  password: 'password'
-      #  localPath: './dist/index.js'
-      #  remotePath: './'
+#server: ftp.samkirkland.com
+#        username: myFtpUserName
+#        password: ${{ secrets.password }}
+#        protocol: ftps
+#        port: 1234 # todo replace with your web hosts ftps port
        
    
       #- name: GitHub Release
