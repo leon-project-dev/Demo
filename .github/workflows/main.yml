@@ -84,13 +84,12 @@ jobs:
       - name: deploy file to server
         uses: Creepios/sftp-action@v1.0.3
         with:  
-          username: '${{ secrets.FILE_SERVER_USER_NAME }}'  
-          host: '${{ secrets.FILE_SERVER_IP }}'
-          port: '${{ secrets.FILE_SERVER_PORT }}'
-          password: ${{ secrets.FILE_SERVER_USER_PWD }} 
+          username: 'Leon'#'${{ secrets.FILE_SERVER_USER_NAME }}'  
+          host: '192.168.5.61'#'${{ secrets.FILE_SERVER_IP }}'
+          port: '8090'#'${{ secrets.FILE_SERVER_PORT }}'
+          password: 'aP75OiKHAM76woYs'#${{ secrets.FILE_SERVER_USER_PWD }} 
           localPath: './pub/*'  
-          remotePath: '/'
-          agent: ''
+          remotePath: '/'          
 
       #    uses: Creepios/sftp-action@v1.0.3
       #with:
