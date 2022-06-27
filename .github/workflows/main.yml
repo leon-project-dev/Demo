@@ -17,20 +17,43 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
+
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+
     # The type of runner that the job will run on
-    runs-on: windows-latest    
+    runs-on: windows-latest 
+    
+    env:
+      Solution_Name: Action-wpf
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:      
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      
-      #- name: clean
-      #  run: dotnet clean
-      
-      #- name: Install dependencies
-      #  run: dotnet restore
+        with:
+            fetch-depth: 0
+     
+      # Install the .NET Core workload
+      - name: Install .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+            dotnet-version: 6.0.x
 
+      # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild@v1.0.2 
+      
+      # Restore the application to populate the obj folder with RuntimeIdentifiers
+      - name: Restore the application
+        run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+        env:
+          Configuration: ${{ matrix.configuration }}
+      
+      - name: public ClickOnce
+        run: msbuild  $env:Solution_Name  /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="./pub/" 
+      
       #- name: build
       #  run: dotnet msbuild >> log.txt
       
@@ -48,25 +71,32 @@ jobs:
       #      path: log.txt
       #  if: always()
       
-      - name: publish
-        run: dotnet publish -c Release -o pub\
-      
       - uses: actions/upload-artifact@v3
         with:
             name: package
             path: pub\
 
-      - name: GitHub Release
-        id: create_release
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v1.0.2
-          release_name: v1.0.2
-          body: demo
-          draft: false
-          prerelease: false
+      - name: deploy file to server
+        uses: wlixcc/SFTP-Deploy-Action@v1.0 
+        with:  
+          username: '${{ secrets.FILE_SERVER_USER_NAME }}'  
+          server: '${{ secrets.FILE_SERVER_IP }}'
+          port: '${{ secrets.FILE_SERVER_PORT }}'
+          ssh_private_key: ${{ secrets.FILE_SERVER_USER_PWD }} 
+          local_path: './pub/*'  # 对应我们项目build的文件夹路径
+          remote_path: '/'
+
+      #- name: GitHub Release
+      #  id: create_release
+      #  uses: actions/create-release@latest
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #  with:
+      #    tag_name: v1.0.2
+      #    release_name: v1.0.2
+      #    body: demo
+      #    draft: false
+      #    prerelease: false
 
       
 
