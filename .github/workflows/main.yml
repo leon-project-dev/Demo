@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        configuration: [Debug, Release]
+        configuration: [Debug]
 
     # The type of runner that the job will run on
     runs-on: windows-latest 
@@ -74,7 +74,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
             name: package
-            path: pub\
+            path: ./pub/
 
       - name: deploy file to server
         uses: wlixcc/SFTP-Deploy-Action@v1.0 
