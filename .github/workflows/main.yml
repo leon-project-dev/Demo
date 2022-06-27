@@ -93,17 +93,22 @@ jobs:
           #${{ secrets.FILE_SERVER_USER_NAME }}'  
           password: 'x8HK4jt5RPJJ3gMtc8Ab'
           #${{ secrets.FILE_SERVER_USER_PWD }} 
-          localPath: './pub/'                   
-          remotePath: '/Action-wpf/'
+          localDir: './pub/'                   
+          remoteDir: '/Action-wpf/'
 
-#uses: Creepios/sftp-action@v1.0.3
-#      with:
-#        host: '127.0.0.1'
-#        port: 22
-#        username: 'root'
-#        password: 'password'
-#        localPath: './dist/index.js'
-#        remotePath: './'
+##host: 'example.com',                  # Required.
+#  port: 22,                             # Optional, Default to 22.
+#  username: 'user',                     # Required.
+#  password: 'password',                 # Optional.
+#  privateKey: '',                       # Optional, your private key(Raw content).
+#  passphrase: '',                       # Optional.
+#  agent: '',                            # Optional, path to the ssh-agent socket.
+#  localDir: 'dist',                     # Required, Absolute or relative to cwd.
+#  remoteDir: '/path/to/dest'            # Required, Absolute path only.
+#  dryRun: false                         # Optional. Default to false.
+#  exclude: 'node_modules/,**/*.spec.ts' # Optional. exclude patterns (glob), use ',' to split, Default to ''.
+#  excludeMode: 'remove'                 # Optional, Behavior for excluded files ('remove' or 'ignore'), Default to 'remove'.
+#  forceUpload: false                    # Optional, Force uploading all files, Default to false(upload only newer files).
        
    
       #- name: GitHub Release
