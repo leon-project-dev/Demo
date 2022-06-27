@@ -52,7 +52,7 @@ jobs:
           Configuration: ${{ matrix.configuration }}
       
       - name: public ClickOnce
-        run: msbuild  $env:Solution_Name  /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="./pub/" 
+        run: msbuild  $env:Solution_Name  /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" 
       
       #- name: build
       #  run: dotnet msbuild >> log.txt
