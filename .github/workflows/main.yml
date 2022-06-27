@@ -82,25 +82,28 @@ jobs:
             path: pub/
 
       - name: deploy file to server
-        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        uses: Creepios/sftp-action@v1.0.3
         with:            
-          server: '124.223.33.67'
+          host: '124.223.33.67'
           # ${{ secrets.FILE_SERVER_IP }}'
           port: '16490'
           #${{ secrets.FILE_SERVER_PORT }}'
-          protocol: ftps
+          #protocol: ftps
           username: 'Administrator'
           #${{ secrets.FILE_SERVER_USER_NAME }}'  
           password: 'x8HK4jt5RPJJ3gMtc8Ab'
           #${{ secrets.FILE_SERVER_USER_PWD }} 
-          local-dir: './pub/'                   
-          server-dir: '/Action-wpf/'
+          localPath: './pub/'                   
+          remotePath: '/Action-wpf/'
 
-#server: ftp.samkirkland.com
-#        username: myFtpUserName
-#        password: ${{ secrets.password }}
-#        protocol: ftps
-#        port: 1234 # todo replace with your web hosts ftps port
+#uses: Creepios/sftp-action@v1.0.3
+#      with:
+#        host: '127.0.0.1'
+#        port: 22
+#        username: 'root'
+#        password: 'password'
+#        localPath: './dist/index.js'
+#        remotePath: './'
        
    
       #- name: GitHub Release
