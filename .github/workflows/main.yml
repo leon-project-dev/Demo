@@ -71,23 +71,29 @@ jobs:
       #      path: log.txt
       #  if: always()
       
-      - name: pwd
-        run: Dir
-
       - uses: actions/upload-artifact@v3
         with:
             name: package
             path: pub/
 
       - name: deploy file to server
-        uses: wlixcc/SFTP-Deploy-Action@v1.0 
+        uses: wangyucode/sftp-upload-action@v1.3.2 
         with:  
           username: '${{ secrets.FILE_SERVER_USER_NAME }}'  
-          server: '${{ secrets.FILE_SERVER_IP }}'
+          host: '${{ secrets.FILE_SERVER_IP }}'
           port: '${{ secrets.FILE_SERVER_PORT }}'
-          ssh_private_key: ${{ secrets.FILE_SERVER_USER_PWD }} 
-          local_path: './pub/*'  # 对应我们项目build的文件夹路径
-          remote_path: '/'
+          password: ${{ secrets.FILE_SERVER_USER_PWD }} 
+          localDir: './pub/*'  
+          remoteDir: '/'
+
+       
+  #         host: 'example.com',                  # Required.
+  #port: 22,                             # Optional, Default to 22.
+  #username: 'user',                     # Required.
+  #password: 'password',                 # Optional.
+
+  # localDir: 'dist',                     # Required, Absolute or relative to cwd.
+  #remoteDir: '/path/to/dest'  
 
       #- name: GitHub Release
       #  id: create_release
