@@ -23,7 +23,8 @@ jobs:
         configuration: [Debug]
 
     # The type of runner that the job will run on
-    runs-on: windows-latest 
+    runs-on: [self-hosted]
+    # windows-latest 
     
     env:
       Solution_Name: Action-wpf
@@ -93,8 +94,8 @@ jobs:
           #${{ secrets.FILE_SERVER_USER_NAME }}'  
           password: 'x8HK4jt5RPJJ3gMtc8Ab'
           #${{ secrets.FILE_SERVER_USER_PWD }} 
-          localDir: './pub/'                   
-          remoteDir: '/Action-wpf/'
+          localPath: './pub/'                   
+          remotePath: '/Action-wpf/'
 
 ##host: 'example.com',                  # Required.
 #  port: 22,                             # Optional, Default to 22.
