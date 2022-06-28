@@ -65,7 +65,7 @@ jobs:
         run: echo "::set-output name=today::$(Get-Date -Format 'MdHms')"
       
       - name: FormatStr
-        run: format('Hello{0}{1}{2}', $Solution_Name, 'the', 'Octocat')
+        run: echo format('Hello{0}{1}{2}', $Solution_Name, 'the', 'Octocat')
         # echo '$Solution_Name/WPF/Demo'
 
       #- name: public ClickOnce
