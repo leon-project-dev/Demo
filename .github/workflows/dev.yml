@@ -67,7 +67,21 @@ jobs:
       - name: FormatStr
         run: echo format('Hello{0}{1}{2}', $Solution_Name, 'the', 'Octocat')
         # echo '$Solution_Name/WPF/Demo'
-
+      - name: deploy file to server
+        uses:  SamKirkland/FTP-Deploy-Action@4.3.0
+        with:            
+          server: '124.223.33.67'
+          # ${{ secrets.FILE_SERVER_IP }}'
+          port: '8090'
+          #${{ secrets.FILE_SERVER_PORT }}'
+          protocol: ftps
+          username: 'Leon'
+          #${{ secrets.FILE_SERVER_USER_NAME }}'  
+          password: 'x8HK4jt5RPJJ3gMtc8Ab'
+          #${{ secrets.FILE_SERVER_USER_PWD }} 
+          local-dir: './Action-wpf/App.xaml'                   
+          server-dir: format('{{Hello/{0}/{1}/{2}}}/', $env:Solution_Name, 'the', 'Octocat')
+          #format('{0}/developer/{1}/', $env:Solution_Name, ${{steps.date.outputs.today}})
       #- name: public ClickOnce
       #  run: msbuild  $env:Solution_Name  /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" 
       
