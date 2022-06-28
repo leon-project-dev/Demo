@@ -63,6 +63,9 @@ jobs:
       - name: Get Current Date
         id: date
         run: echo "::set-output name=today::$(Get-Date -Format 'MdHms')"
+      
+      - name: FormatStr
+        run: echo format('{{0}/developer/{1}/}', 1000, 6288580)
 
       #- name: public ClickOnce
       #  run: msbuild  $env:Solution_Name  /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" 
