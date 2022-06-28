@@ -53,7 +53,7 @@ jobs:
       
       # Restore the application to populate the obj folder with RuntimeIdentifiers
       - name: Restore the application
-        run: msbuild $Solution_Name /t:Restore /p:Configuration=$env:Configuration
+        run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
         env:
           Configuration: ${{ matrix.configuration }}
       
@@ -64,7 +64,7 @@ jobs:
 
       # 指定版本号，输出目录，
       - name: public ClickOnce
-        run: msbuild  $Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationRevision=${{steps.date.outputs.today}} /p:Configuration=Debug 
+        run: msbuild  $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationRevision=${{steps.date.outputs.today}} /p:Configuration=Debug 
       
       #- name: build
       #  run: dotnet msbuild >> log.txt
@@ -101,7 +101,7 @@ jobs:
           password: 'x8HK4jt5RPJJ3gMtc8Ab'
           #${{ secrets.FILE_SERVER_USER_PWD }} 
           local-dir: './pub/'                   
-          server-dir: './$Solution_Name/developer/${{steps.date.outputs.today}}/'
+          server-dir: ${{env:Solution_Name/developer/${{steps.date.outputs.today}}/}}
 
 #server: ftp.samkirkland.com
 #        username: myFtpUserName
