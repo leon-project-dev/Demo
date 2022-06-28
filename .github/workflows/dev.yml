@@ -80,7 +80,7 @@ jobs:
           password: 'x8HK4jt5RPJJ3gMtc8Ab'
           #${{ secrets.FILE_SERVER_USER_PWD }} 
           local-dir: './Action-wpf/App.xaml'                   
-          server-dir: '${{$env:Solution_Name}}/Demo/'
+          server-dir: '${{Solution_Name}}/Demo/'
           #format('{0}/developer/{1}/', $env:Solution_Name, ${{steps.date.outputs.today}})
       #- name: public ClickOnce
       #  run: msbuild  $env:Solution_Name  /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" 
