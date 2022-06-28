@@ -23,7 +23,7 @@ jobs:
         configuration: [Debug]
 
     # The type of runner that the job will run on
-    runs-on: [self-hosted]
+    runs-on: windows-latest
     # windows-latest 
     
     env:
@@ -43,8 +43,8 @@ jobs:
             dotnet-version: 6.0.x
 
       # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-      #- name: Setup MSBuild.exe
-      #  uses: microsoft/setup-msbuild@v1.0.2 
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild@v1.0.2 
 
       - name:  Setup Node
         uses: actions/setup-node@v3
@@ -83,34 +83,25 @@ jobs:
             path: pub/
 
       - name: deploy file to server
-        uses: Creepios/sftp-action@v1.0.3
+        uses:  SamKirkland/FTP-Deploy-Action@4.3.0
         with:            
           host: '124.223.33.67'
           # ${{ secrets.FILE_SERVER_IP }}'
-          port: '16490'
+          port: '8090'
           #${{ secrets.FILE_SERVER_PORT }}'
-          #protocol: ftps
-          username: 'Administrator'
+          protocol: ftps
+          username: 'Leon'
           #${{ secrets.FILE_SERVER_USER_NAME }}'  
           password: 'x8HK4jt5RPJJ3gMtc8Ab'
           #${{ secrets.FILE_SERVER_USER_PWD }} 
-          localPath: './pub/'                   
-          remotePath: '/Action-wpf/'
+          local-dir: './pub/'                   
+          server-dir: '/Action-wpf/'
 
-##host: 'example.com',                  # Required.
-#  port: 22,                             # Optional, Default to 22.
-#  username: 'user',                     # Required.
-#  password: 'password',                 # Optional.
-#  privateKey: '',                       # Optional, your private key(Raw content).
-#  passphrase: '',                       # Optional.
-#  agent: '',                            # Optional, path to the ssh-agent socket.
-#  localDir: 'dist',                     # Required, Absolute or relative to cwd.
-#  remoteDir: '/path/to/dest'            # Required, Absolute path only.
-#  dryRun: false                         # Optional. Default to false.
-#  exclude: 'node_modules/,**/*.spec.ts' # Optional. exclude patterns (glob), use ',' to split, Default to ''.
-#  excludeMode: 'remove'                 # Optional, Behavior for excluded files ('remove' or 'ignore'), Default to 'remove'.
-#  forceUpload: false                    # Optional, Force uploading all files, Default to false(upload only newer files).
-       
+#server: ftp.samkirkland.com
+#        username: myFtpUserName
+#        password: ${{ secrets.password }}
+#        protocol: ftps
+#        port: 1234 # todo replace with your web hosts ftps port       
    
       #- name: GitHub Release
       #  id: create_release
