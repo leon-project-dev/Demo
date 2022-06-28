@@ -85,7 +85,7 @@ jobs:
       - name: deploy file to server
         uses:  SamKirkland/FTP-Deploy-Action@4.3.0
         with:            
-          host: '124.223.33.67'
+          server: '124.223.33.67'
           # ${{ secrets.FILE_SERVER_IP }}'
           port: '8090'
           #${{ secrets.FILE_SERVER_PORT }}'
