@@ -1,0 +1,191 @@
+
+
+
+# This is a basic workflow to help you get started with Actions
+
+name: Developer CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]   
+    paths-ignore: ["**/*.txt","**/*.md", "LICENSE", "**/*.xmind", "**/*.doc", "**/*.docx", "**/*.yml", "**/*.ymal"]
+  
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+
+    strategy:
+      matrix:
+        configuration: [Debug]
+
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+    # windows-latest 
+    
+    env:
+      Solution_Name: Action-wpf
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:      
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      #- uses: actions/checkout@v3
+      #  with:
+      #      fetch-depth: 0
+     
+      ## Install the .NET Core workload
+      #- name: Install .NET Core
+      #  uses: actions/setup-dotnet@v2
+      #  with:
+      #      dotnet-version: 6.0.x
+
+      # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+      #- name: Setup MSBuild.exe
+      #  uses: microsoft/setup-msbuild@v1.0.2 
+
+      #- name:  Setup Node
+      #  uses: actions/setup-node@v3
+      #  with:
+      #      node-version: 14
+      
+      ## Restore the application to populate the obj folder with RuntimeIdentifiers
+      #- name: Restore the application
+      #  run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+      #  env:
+      #    Configuration: ${{ matrix.configuration }}
+      
+      - name: Get Current Date
+        id: date
+        run: echo "::set-output name=today::$(date +'%Y%m%d%h%M%s')"
+
+      #- name: public ClickOnce
+      #  run: msbuild  $env:Solution_Name  /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" 
+      
+      #- name: build
+      #  run: dotnet msbuild >> log.txt
+      
+      #- name: notify build failure
+      #  uses: tokorom/action-slack-incoming-webhook@main
+      #  env:
+      #       INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #  with:
+      #       text: "build failte, pleace check code, build log url: https://github.com/leon-project-dev/Demo/suites/7073840480/artifacts/279264187"
+      #  if: failure()
+        
+      #- uses: actions/upload-artifact@v3
+      #  with:
+      #      name: log
+      #      path: log.txt
+      #  if: always()
+      
+      #- uses: actions/upload-artifact@v3
+      #  with:
+      #      name: package
+      #      path: pub/
+
+      #- name: deploy file to server
+      #  uses:  SamKirkland/FTP-Deploy-Action@4.3.0
+      #  with:            
+      #    server: '124.223.33.67'
+      #    # ${{ secrets.FILE_SERVER_IP }}'
+      #    port: '8090'
+      #    #${{ secrets.FILE_SERVER_PORT }}'
+      #    protocol: ftps
+      #    username: 'Leon'
+      #    #${{ secrets.FILE_SERVER_USER_NAME }}'  
+      #    password: 'x8HK4jt5RPJJ3gMtc8Ab'
+      #    #${{ secrets.FILE_SERVER_USER_PWD }} 
+      #    local-dir: './pub/'                   
+      #    server-dir: ./$env:Solution_Name/
+
+#server: ftp.samkirkland.com
+#        username: myFtpUserName
+#        password: ${{ secrets.password }}
+#        protocol: ftps
+#        port: 1234 # todo replace with your web hosts ftps port       
+   
+      #- name: GitHub Release
+      #  id: create_release
+      #  uses: actions/create-release@latest
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #  with:
+      #    tag_name: v1.0.2
+      #    release_name: v1.0.2
+      #    body: demo
+      #    draft: false
+      #    prerelease: false
+
+      
+
+      ## zip
+      #- name: zip 
+      #  run: Compress-Archive -Path .\pub 'pub.zip'
+        
+      # TODO:Deploy  
+      #- name: delpoy server
+
+
+      #- name: notify success
+      #  uses: tokorom/action-slack-incoming-webhook@main
+      #  env:
+      #       INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #  with:
+      #       text: "${{github.actor}} build success, pack url: http://www.baidu.com"
+      #       block: 
+      #         -
+      #          - type: header
+      #          -text:
+      #               - 
+                 
+             
+       
+
+            # blocks: |
+            # [
+            #  {
+            #    "type": "header",
+            #    "text": {
+            #      "type": "plain_text",
+            #      "text": "${{ github.event.release.tag_name}} is published!"
+            #    }
+            #  },
+            #  {
+            #    "type": "section",
+            #    "text": {
+            #      "type": "mrkdwn",
+            #      "text": "*Author:*\n${{ github.actor }}"
+            #    }
+            #  },
+            #   {
+            #    "type": "section",
+            #    "text": {
+            #      "type": "mrkdwn",
+            #      "text": "*Information:*"
+            #    }
+            #  },
+            #  {
+            #    "type": "section",
+            #    "text": {
+            #      "type": "mrkdwn",
+            #      "text": ${{ toJSON(github.event.release.body) }}
+            #    }
+            #  },
+            #  {
+            #    "type": "section",
+            #    "text": {
+            #      "type": "mrkdwn",
+            #      "text": "${{ github.event.release.html_url }}"
+            #    }
+            #  }
+            #]
+     
+      
+      
+      
