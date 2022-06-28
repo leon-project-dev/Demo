@@ -65,7 +65,8 @@ jobs:
         run: echo "::set-output name=today::$(Get-Date -Format 'MdHms')"
       
       - name: FormatStr
-        run: echo '$Solution_Name/WPF/Demo'
+        run: format('Hello{0}{1}{2}', '$Solution_Name', 'the', 'Octocat')
+        # echo '$Solution_Name/WPF/Demo'
 
       #- name: public ClickOnce
       #  run: msbuild  $env:Solution_Name  /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" 
