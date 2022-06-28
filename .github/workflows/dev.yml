@@ -66,7 +66,7 @@ jobs:
       
       - name: Get Name
         id: Solution
-        run: echo "::set-output name=wpf::$env.Solution_Name"
+        run: echo "::set-output name=wpf::Solution_Name"
       
       - name: FormatStr
         run: echo format('Hello{0}{1}{2}', $Solution_Name, 'the', 'Octocat')
