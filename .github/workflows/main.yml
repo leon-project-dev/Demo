@@ -62,6 +62,10 @@ jobs:
         id: date
         run: echo "::set-output name=today::$(Get-Date -Format 'MdHms')"
 
+      - name: Save Solution Name
+        id: Solution
+        run: echo "::set-output name=Solution::${{env.Solution_Name}}"
+
       # 指定版本号，输出目录，
       - name: public ClickOnce
         run: msbuild  $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationRevision=${{steps.date.outputs.today}} /p:Configuration=Debug 
@@ -101,7 +105,8 @@ jobs:
           password: 'x8HK4jt5RPJJ3gMtc8Ab'
           #${{ secrets.FILE_SERVER_USER_PWD }} 
           local-dir: './pub/'                   
-          server-dir: format('{0}/developer/{1}/', $env:Solution_Name, ${{steps.date.outputs.today}})
+          server-dir: './${{steps.Solution.outputs.Solution}}/developer/${{steps.date.outputs.today}}/'
+          #format('{0}/developer/{1}/', $env:Solution_Name, ${{steps.date.outputs.today}})
           #'./$env:Solution_Name /developer/${{steps.date.outputs.today}}/'
 
 #server: ftp.samkirkland.com
