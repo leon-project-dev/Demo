@@ -95,19 +95,13 @@ jobs:
       - name: deploy file to server
         uses:  SamKirkland/FTP-Deploy-Action@4.3.0
         with:            
-          server: '124.223.33.67'
-          # ${{ secrets.FILE_SERVER_IP }}'
-          port: '8090'
-          #${{ secrets.FILE_SERVER_PORT }}'
+          server: ${{ secrets.FILE_SERVER_IP }}'
+          port: ${{ secrets.FILE_SERVER_PORT }}'
           protocol: ftps
-          username: 'Leon'
-          #${{ secrets.FILE_SERVER_USER_NAME }}'  
-          password: 'x8HK4jt5RPJJ3gMtc8Ab'
-          #${{ secrets.FILE_SERVER_USER_PWD }} 
+          username: ${{ secrets.FILE_SERVER_USER_NAME }}'  
+          password: ${{ secrets.FILE_SERVER_USER_PWD }} 
           local-dir: './pub/'                   
-          server-dir: './${{steps.Solution.outputs.Solution}}/developer/${{steps.date.outputs.today}}/'
-          #format('{0}/developer/{1}/', $env:Solution_Name, ${{steps.date.outputs.today}})
-          #'./$env:Solution_Name /developer/${{steps.date.outputs.today}}/'
+          server-dir: './${{steps.Solution.outputs.Solution}}/developer/${{steps.date.outputs.today}}/'          
 
 #server: ftp.samkirkland.com
 #        username: myFtpUserName
