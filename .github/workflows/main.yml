@@ -101,7 +101,7 @@ jobs:
           password: 'x8HK4jt5RPJJ3gMtc8Ab'
           #${{ secrets.FILE_SERVER_USER_PWD }} 
           local-dir: './pub/'                   
-          server-dir: "./${{env:Solution_Name}}/developer/${{steps.date.outputs.today}}/"
+          server-dir: './$env:Solution_Name/developer/${{steps.date.outputs.today}}/'
 
 #server: ftp.samkirkland.com
 #        username: myFtpUserName
