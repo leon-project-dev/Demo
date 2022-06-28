@@ -24,5 +24,10 @@ namespace Action_wpf
         {
             InitializeComponent();
         }
+
+        private void Window_LocationChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
