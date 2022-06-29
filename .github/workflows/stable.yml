@@ -18,14 +18,32 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
    inputs:
-    Version:
-      description: '大版本号'
-      required: true
-      default: '1.0.0.*'
-    Revision:
-      description: '修订次数'
-      required: true
-      default: "1"
+      Version:
+        description: '大版本号'
+        required: true
+        default: '1.0.0.*'
+      Revision:
+        description: '修订次数'
+        required: true
+        default: "1"
+
+   secrets:
+      FILE_SERVER_IP:
+        description: 'file server ip'
+        required: true
+
+      FILE_SERVER_PORT:
+        description: 'file server port'
+        required: true
+
+      FILE_SERVER_USER_NAME :
+        description: 'file server user name'
+        required: true
+
+      FILE_SERVER_USER_PWD:
+        description: 'file server user pwd'
+        required: true
+
   
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
