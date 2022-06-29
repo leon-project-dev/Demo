@@ -66,7 +66,7 @@ jobs:
       # dev 使用时间戳作为版本号
       - name: Get Version
         id: version
-        run: echo "::set-output name=today::$(Get-Date -Format 'Hms')"
+        run: echo "::set-output name=today::$(Get-Date -Format 'MdHm')"
       
       - name: Get Display Folder
         id: folder
