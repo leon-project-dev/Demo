@@ -32,6 +32,8 @@ jobs:
     
     env:
       Solution_Name: Action-wpf
+      InstallUrl: http://124.223.33.67:16480/Action-wpf/update/developer/
+
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:      
@@ -74,9 +76,9 @@ jobs:
         id: solution
         run: echo "::set-output name=name::${{env.Solution_Name}}"
         
-      # 指定版本号，输出目录，
+      # 指定版本号，输出目录，更新地址
       - name: public ClickOnce
-        run: msbuild  $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationRevision=${{steps.version.outputs.today}} /p:Configuration=Debug 
+        run: msbuild $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationRevision=${{steps.version.outputs.today}} /p:InstallUrl=$env:InstallUrl /p:Configuration=Debug 
       
       - uses: actions/upload-artifact@v3
         with:

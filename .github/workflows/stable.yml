@@ -39,7 +39,8 @@ jobs:
     # windows-latest 
     
     env:
-      Solution_Name: Action-wpf      
+      Solution_Name: Action-wpf    
+      InstallUrl: http://124.223.33.67:16480/Action-wpf/update/stable/
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:      
@@ -81,9 +82,9 @@ jobs:
         id: server
         run: echo "::set-output name=ip::${{secrets.FILE_SERVER_IP }}"   
         
-      # 指定版本号，输出目录，
+      # 指定版本号，输出目录，更新地址
       - name: public ClickOnce
-        run: msbuild  $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=${{github.event.inputs.Version}} /p:Configuration=Release
+        run: msbuild $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=${{github.event.inputs.Version}} /p:InstallUrl=$env:InstallUrl /p:Configuration=Release
       
       - uses: actions/upload-artifact@v3
         with:
