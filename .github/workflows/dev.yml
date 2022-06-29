@@ -74,8 +74,12 @@ jobs:
                         "author_icon": "${{ github.event.sender.avatar_url }}",                 
                         "fields": [
                                         {
+                                            "title": "Commit User",
+                                            "value": "${{ github.event.commits[0].committer.name}}"
+                                        },
+                                        {
                                             "title": "Commit Message",
-                                            "value": "${{ github.commits[0].message }}"
+                                            "value": "${{ github.event.commits[0].message }}"
                                         },
                                         {
                                             "title": "GitHub Actions URL",
@@ -101,8 +105,12 @@ jobs:
                         "author_icon": "${{ github.event.sender.avatar_url }}",                 
                         "fields": [
                                         {
+                                            "title": "Commit User",
+                                            "value": "${{ github.event.commits[0].committer.name}}"
+                                        },
+                                        {
                                             "title": "Commit Message",
-                                            "value": "${{ github.commits[0].message }}"
+                                            "value": "${{ github.event.commits[0].message }}"
                                         },
                                         {
                                             "title": "GitHub Actions URL",
