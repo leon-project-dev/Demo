@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Action_wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="480" Width="450" LocationChanged="Window_LocationChanged">
+        Title="MainWindow" Height="480" Width="500" LocationChanged="Window_LocationChanged">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
