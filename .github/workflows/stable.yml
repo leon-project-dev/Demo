@@ -70,6 +70,10 @@ jobs:
       - name: Save Solution Name
         id: solution
         run: echo "::set-output name=name::${{env.Solution_Name}}"
+
+      - name: Save Version
+        id: version
+        run: echo "::set-output name=vers::${{env.version}}"
         
       # 指定版本号，输出目录，
       - name: public ClickOnce
@@ -89,7 +93,7 @@ jobs:
           username: ${{ secrets.FILE_SERVER_USER_NAME }}'  
           password: ${{ secrets.FILE_SERVER_USER_PWD }} 
           local-dir: './pub/'
-          server-dir: './${{steps.solution.outputs.name}}/stable/${{steps.folder.outputs.name}}/'          
+          server-dir: './${{steps.solution.outputs.name}}/stable/${{steps.version.outputs.vers}}/'          
           
       ## zip
       #- name: zip 
