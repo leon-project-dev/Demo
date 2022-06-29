@@ -19,13 +19,9 @@ on:
   workflow_dispatch:
    inputs:
       Version:
-        description: '大版本号'
+        description: '版本号，最后一个是修订次数'
         required: true
-        default: '1.0.0.*'
-      Revision:
-        description: '修订次数'
-        required: true
-        default: "1"
+        default: '1.0.0.1'      
         
 
   
@@ -87,7 +83,7 @@ jobs:
         
       # 指定版本号，输出目录，
       - name: public ClickOnce
-        run: msbuild  $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=${{github.event.inputs.Version}} /p:ApplicationRevision=${{github.event.inputs.Revision}} /p:Configuration=Release
+        run: msbuild  $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=${{github.event.inputs.Version}} /p:Configuration=Release
       
       - uses: actions/upload-artifact@v3
         with:
