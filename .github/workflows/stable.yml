@@ -33,7 +33,7 @@ jobs:
     env:
       Solution_Name: Action-wpf
       # 每次发布需要手动修改版本号
-      Version: 1.0.0.1
+      Version: 1.0.0
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:      
@@ -77,7 +77,7 @@ jobs:
         
       # 指定版本号，输出目录，
       - name: public ClickOnce
-        run: msbuild  $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=$env.Version /p:Configuration=Release
+        run: msbuild  $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=$env.Version /ApplicationRevision=1 /p:Configuration=Release
       
       - uses: actions/upload-artifact@v3
         with:
