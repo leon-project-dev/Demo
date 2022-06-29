@@ -4,10 +4,14 @@ name: Developer CI
 
 # Controls when the workflow will run
 on:
+  
+  # 定时执行, 每天国际时间 11 点, 北京时间 20 点
+  schedule:
+    - cron: '0 11 * * *'
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]   
-    paths-ignore: ["**/*.txt","**/*.md", "LICENSE", "**/*.xmind", "**/*.doc", "**/*.docx", "**/*.yml", "**/*.ymal"]
+  #push:
+  #  branches: [ "main" ]   
+  #  paths-ignore: ["**/*.txt","**/*.md", "LICENSE", "**/*.xmind", "**/*.doc", "**/*.docx", "**/*.yml", "**/*.ymal"]
   
 
   # Allows you to run this workflow manually from the Actions tab
@@ -109,24 +113,7 @@ jobs:
           local-dir: './pub/'
           server-dir: './${{steps.solution.outputs.name}}/developer/${{steps.folder.outputs.name}}/'          
 
-#server: ftp.samkirkland.com
-#        username: myFtpUserName
-#        password: ${{ secrets.password }}
-#        protocol: ftps
-#        port: 1234 # todo replace with your web hosts ftps port       
-   
-      #- name: GitHub Release
-      #  id: create_release
-      #  uses: actions/create-release@latest
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #  with:
-      #    tag_name: v1.0.2
-      #    release_name: v1.0.2
-      #    body: demo
-      #    draft: false
-      #    prerelease: false
-
+  
       
 
       ## zip
