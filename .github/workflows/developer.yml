@@ -7,7 +7,7 @@ on:
   
   # 定时执行, 每天国际时间 12 点, 北京时间 20 点
   schedule:
-    - cron: '0 12 * * *'
+    - cron: '0 7 30 * *'
   # Triggers the workflow on push or pull request events but only for the "main" branch
   #push:
   #  branches: [ "main" ]   
