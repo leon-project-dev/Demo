@@ -1,13 +1,13 @@
-# This is a basic workflow to help you get started with Actions
+# every day build once
 
-name: Developer CI
+name: Schedule Developer CI
 
 # Controls when the workflow will run
 on:
   
-  # 定时执行, 每天国际时间 11 点, 北京时间 20 点
+  # 定时执行, 每天国际时间 12 点, 北京时间 20 点
   schedule:
-    - cron: '0 11 * * *'
+    - cron: '0 12 * * *'
   # Triggers the workflow on push or pull request events but only for the "main" branch
   #push:
   #  branches: [ "main" ]   
@@ -73,29 +73,10 @@ jobs:
       - name: Save Solution Name
         id: solution
         run: echo "::set-output name=name::${{env.Solution_Name}}"
-
-
-
+        
       # 指定版本号，输出目录，
       - name: public ClickOnce
         run: msbuild  $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationRevision=${{steps.version.outputs.today}} /p:Configuration=Debug 
-      
-      #- name: build
-      #  run: dotnet msbuild >> log.txt
-      
-      #- name: notify build failure
-      #  uses: tokorom/action-slack-incoming-webhook@main
-      #  env:
-      #       INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #  with:
-      #       text: "build failte, pleace check code, build log url: https://github.com/leon-project-dev/Demo/suites/7073840480/artifacts/279264187"
-      #  if: failure()
-        
-      #- uses: actions/upload-artifact@v3
-      #  with:
-      #      name: log
-      #      path: log.txt
-      #  if: always()
       
       - uses: actions/upload-artifact@v3
         with:
@@ -112,10 +93,7 @@ jobs:
           password: ${{ secrets.FILE_SERVER_USER_PWD }} 
           local-dir: './pub/'
           server-dir: './${{steps.solution.outputs.name}}/developer/${{steps.folder.outputs.name}}/'          
-
-  
-      
-
+          
       ## zip
       #- name: zip 
       #  run: Compress-Archive -Path .\pub 'pub.zip'
