@@ -59,7 +59,7 @@ jobs:
         - name: ls -a via ssh
           uses: garygrossgarten/github-action-ssh@release
           with:
-            command: powershell ls
+            command: powershell cd /pub/version/Action-wpf/developer && (Get-ChildItem).Count
             host: "124.223.33.67"
             username: "Administrator"
             password : "7iQrzu1miQvcdPcC"
