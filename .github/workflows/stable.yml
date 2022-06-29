@@ -2,6 +2,7 @@
 
 name: Stable CI
 
+
 # Controls when the workflow will run
 on:
   
@@ -16,7 +17,16 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
+   inputs:
+    Version:
+      description: 'build version'
+      required: true
+      default: '1.0.0'
+    Revision:
+      description: '修订次数'
+      required: true
+      default: ${{1}}
+  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -31,9 +41,7 @@ jobs:
     # windows-latest 
     
     env:
-      Solution_Name: Action-wpf
-      # 每次发布需要手动修改版本号
-      Version: 1.0.0
+      Solution_Name: Action-wpf      
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:      
@@ -69,15 +77,11 @@ jobs:
 
       - name: Save Solution Name
         id: solution
-        run: echo "::set-output name=name::${{env.Solution_Name}}"
-
-      - name: Save Version
-        id: version
-        run: echo "::set-output name=vers::${{env.version}}"
+        run: echo "::set-output name=name::${{env.Solution_Name}}"        
         
       # 指定版本号，输出目录，
       - name: public ClickOnce
-        run: msbuild  $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=$env.Version /ApplicationRevision=1 /p:Configuration=Release
+        run: msbuild  $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=${{github.event.inputs.Version}} /ApplicationRevision=${{github.event.inputs.Revision}} /p:Configuration=Release
       
       - uses: actions/upload-artifact@v3
         with:
