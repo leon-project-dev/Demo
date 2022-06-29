@@ -40,7 +40,7 @@ jobs:
     
     env:
       Solution_Name: Action-wpf    
-      InstallUrl: http://124.223.33.67:16480/Action-wpf/update/stable/
+      InstallUrl: http://124.223.33.67:16480/update/Action-wpf/stable/
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:      
