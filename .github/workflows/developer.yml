@@ -68,7 +68,7 @@ jobs:
       
       - name: Get Display Folder
         id: folder
-        run: echo "::set-output name=name::$(Get-Date -Format 'YMdHms')"
+        run: echo "::set-output name=name::$(Get-Date -Format 'yyyyMMddHHmmss')"
 
       - name: Save Solution Name
         id: solution
