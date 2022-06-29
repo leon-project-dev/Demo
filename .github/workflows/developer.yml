@@ -5,7 +5,7 @@ name: Schedule Developer CI
 # Controls when the workflow will run
 on:
   
-  # å®šæ—¶æ‰§è¡Œ, æ¯å¤©å›½é™…æ—¶é—´ 12 ç‚¹, åŒ—äº¬æ—¶é—´ 20 ç‚¹
+  # ¶¨Ê±Ö´ĞĞ, Ã¿Ìì¹ú¼ÊÊ±¼ä 12 µã, ±±¾©Ê±¼ä 20 µã
   schedule:
     - cron: '0 12 * * *'
   # Triggers the workflow on push or pull request events but only for the "main" branch
@@ -61,7 +61,7 @@ jobs:
         env:
           Configuration: ${{ matrix.configuration }}
       
-      # dev ä½¿ç”¨æ—¶é—´æˆ³ä½œä¸ºç‰ˆæœ¬å·
+      # dev Ê¹ÓÃÊ±¼ä´Á×÷Îª°æ±¾ºÅ
       - name: Get Version
         id: version
         run: echo "::set-output name=today::$(Get-Date -Format 'MdHms')"
@@ -74,7 +74,7 @@ jobs:
         id: solution
         run: echo "::set-output name=name::${{env.Solution_Name}}"
         
-      # æŒ‡å®šç‰ˆæœ¬å·ï¼Œè¾“å‡ºç›®å½•ï¼Œ
+      # Ö¸¶¨°æ±¾ºÅ£¬Êä³öÄ¿Â¼£¬
       - name: public ClickOnce
         run: msbuild  $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationRevision=${{steps.version.outputs.today}} /p:Configuration=Debug 
       
