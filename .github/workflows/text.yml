@@ -43,6 +43,18 @@ jobs:
           run: echo '${{ toJSON(strategy) }}'
         - name: Dump matrix context
           run: echo '${{ toJSON(matrix) }}'
+        
+        
+       
+        
+        - name: executing remote ssh commands using password
+          uses: appleboy/ssh-action@master
+          with:
+            host: "124.223.33.67"
+            username: "Administrator"
+            password: "7iQrzu1miQvcdPcC"
+            port: "8092"
+            script: powershell ls
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       
       
