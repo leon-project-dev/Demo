@@ -92,6 +92,7 @@ jobs:
           username: ${{ secrets.FILE_SERVER_USER_NAME }}  
           password: ${{ secrets.FILE_SERVER_USER_PWD }} 
           local-dir: './pub/'
+          # 发布到版本管理地址
           server-dir: './version/${{steps.solution.outputs.name}}/developer/${{steps.folder.outputs.name}}/'          
       
       - name: deploy file to server update
@@ -103,6 +104,7 @@ jobs:
           username: ${{ secrets.FILE_SERVER_USER_NAME }}  
           password: ${{ secrets.FILE_SERVER_USER_PWD }} 
           local-dir: './pub/'
+          # 发布到 更新地址
           server-dir: './update/${{steps.solution.outputs.name}}/debug/'          
           
       ## zip
