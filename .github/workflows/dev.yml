@@ -75,16 +75,27 @@ jobs:
              INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
              text: "build success, pleace check code, build log "
-             attachments: | 
-                - color: good
-                  author_name: '${{ github.actor }}'
-                  author_icon: ''
-                  fields:
-                    - title: Commit Message
-                      value: 'Test'
-                    - title: GitHub Actions URL
-                      value: '${{ github.event.repository.url }}/actions/runs/${{ github.run_id }}'
-                    - title: Compare URL
-                      value: 'https://github.com/leon-project-dev/Demo/suites/7073840480/artifacts/279264187'
+             attachments: |
+                [
+                    {
+                        "color": "good",
+                        "author_name": "${{ github.actor }}",
+                        "author_icon": "${{ github.event.sender.avatar_url }}",
+                        "fields": [
+                                        {
+                                            "title": "Commit Message",
+                                            "value": "${{ env.COMMIT_MESSAGE }}"
+                                        },
+                                        {
+                                            "title": "GitHub Actions URL",
+                                            "value": "${{ github.event.repository.url }}/actions/runs/${{ github.run_id }}"
+                                        },
+                                        {
+                                            "title": "Compare URL",
+                                            "value": "${{ github.event.compare }}"
+                                        }
+                                ]
+                    }
+                ]
 
         #if: success()
