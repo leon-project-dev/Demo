@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Action_wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="480" Width="801" LocationChanged="Window_LocationChanged">
+        Title="MainWindow" Height="480" Width="500" LocationChanged="Window_LocationChanged">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Background="Blue"></Grid>
+        <Grid Grid.Column="0" Background="Gainsboro"></Grid>
         <Grid Grid.Column="1" Background="Green"></Grid>
-        <Grid Grid.Column="2" Background="Blue"></Grid>
+        <Grid Grid.Column="2" Background="Red"></Grid>
     </Grid>
 </Window>
