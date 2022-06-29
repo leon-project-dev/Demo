@@ -26,23 +26,7 @@ on:
         description: '修订次数'
         required: true
         default: "1"
-
-   secrets:
-      FILE_SERVER_IP:
-        description: 'file server ip'
-        required: true
-
-      FILE_SERVER_PORT:
-        description: 'file server port'
-        required: true
-
-      FILE_SERVER_USER_NAME :
-        description: 'file server user name'
-        required: true
-
-      FILE_SERVER_USER_PWD:
-        description: 'file server user pwd'
-        required: true
+        
 
   
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -95,7 +79,11 @@ jobs:
 
       - name: Save Solution Name
         id: solution
-        run: echo "::set-output name=name::${{env.Solution_Name}}"        
+        run: echo "::set-output name=name::${{env.Solution_Name}}"   
+        
+      - name: save IP
+        id: server
+        run: echo "::set-output name=ip::${{secrets.FILE_SERVER_IP }}"   
         
       # 指定版本号，输出目录，
       - name: public ClickOnce
@@ -109,7 +97,7 @@ jobs:
       - name: deploy file to server
         uses:  SamKirkland/FTP-Deploy-Action@4.3.0
         with:            
-          server: ${{ secrets.FILE_SERVER_IP }}'
+          server: ${{ steps.server.outputs.ip}}'
           port: ${{ secrets.FILE_SERVER_PORT }}'
           protocol: ftps
           username: ${{ secrets.FILE_SERVER_USER_NAME }}'  
