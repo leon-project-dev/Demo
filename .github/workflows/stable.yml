@@ -19,9 +19,9 @@ on:
   workflow_dispatch:
    inputs:
     Version:
-      description: 'build version'
+      description: '大版本号'
       required: true
-      default: '1.0.0'
+      default: '1.0.0.*'
     Revision:
       description: '修订次数'
       required: true
