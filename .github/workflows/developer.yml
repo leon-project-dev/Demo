@@ -105,7 +105,7 @@ jobs:
           password: ${{ secrets.FILE_SERVER_USER_PWD }} 
           local-dir: './pub/'
           # 发布到 更新地址
-          server-dir: './update/${{steps.solution.outputs.name}}/debug/'          
+          server-dir: './update/${{steps.solution.outputs.name}}/developer/'          
           
       ## zip
       #- name: zip 

@@ -112,7 +112,7 @@ jobs:
           password: ${{ secrets.FILE_SERVER_USER_PWD }} 
           local-dir: './pub/'
           # 发布到更新地址
-          server-dir: './update/${{steps.solution.outputs.name}}/release/'          
+          server-dir: './update/${{steps.solution.outputs.name}}/stable/'          
       ## zip
       #- name: zip 
       #  run: Compress-Archive -Path .\pub 'pub.zip'
