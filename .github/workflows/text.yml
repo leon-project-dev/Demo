@@ -62,7 +62,7 @@ jobs:
             command: powershell ls
             host: "124.223.33.67"
             username: "Administrator"
-            passphrase: "7iQrzu1miQvcdPcC"
+            password : "7iQrzu1miQvcdPcC"
             port: "8092"
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       
