@@ -65,7 +65,25 @@ jobs:
         env:
              INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
-             text: "build failte, pleace check code, build log url: https://github.com/leon-project-dev/Demo/suites/7073840480/artifacts/279264187"
+             text: "build failte, check actions log"
+             attachments: |
+                [
+                    {
+                        "color": "good",
+                        "author_name": "${{ github.actor }}",
+                        "author_icon": "${{ github.event.sender.avatar_url }}",                 
+                        "fields": [
+                                        {
+                                            "title": "Commit Message",
+                                            "value": "${{ github.commits[0].message }}"
+                                        },
+                                        {
+                                            "title": "GitHub Actions URL",
+                                            "value": "${{ github.event.repository.url }}/actions/runs/${{ github.run_id }}"
+                                        }
+                                ]
+                    }
+                ]
         if: failure()
 
       
@@ -74,28 +92,24 @@ jobs:
         env:
              INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
-             text: "build success, pleace check code, build log "
+             text: "build success"
              attachments: |
                 [
                     {
                         "color": "good",
                         "author_name": "${{ github.actor }}",
-                        "author_icon": "${{ github.event.sender.avatar_url }}",
+                        "author_icon": "${{ github.event.sender.avatar_url }}",                 
                         "fields": [
                                         {
                                             "title": "Commit Message",
-                                            "value": "${{ env.COMMIT_MESSAGE }}"
+                                            "value": "${{ github.commits[0].message }}"
                                         },
                                         {
                                             "title": "GitHub Actions URL",
                                             "value": "${{ github.event.repository.url }}/actions/runs/${{ github.run_id }}"
-                                        },
-                                        {
-                                            "title": "Compare URL",
-                                            "value": "${{ github.event.compare }}"
                                         }
                                 ]
                     }
                 ]
 
-        #if: success()
+        if: success()
