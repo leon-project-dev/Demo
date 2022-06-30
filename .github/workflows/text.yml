@@ -62,9 +62,14 @@ jobs:
           run: echo "::set-output name=main::$(({${{steps.RemoteVersionFile.outputs.content}}} -split ',')[0])" 
                echo "::set-output name=revision::$(({${{steps.RemoteVersionFile.outputs.content}}} -split ',')[1])"
           
+        - name: Get Loacl Version
+          id: LocalVersion 
+          if:  ${{steps.RemoteVersionFile.outputs.content}} == ${{NULL}}                  
+          run: echo "::set-output name=main::100" 
+               echo "::set-output name=revision::200"
         
         - name: echo version 
-          run: echo " main =${{steps.RemoteVersion.outputs.main}} \n revision =${{steps.RemoteVersion.outputs.revision}}"
+          run: echo "RemoteMain =${{steps.RemoteVersion.outputs.main}}, RemoteRevision =${{steps.RemoteVersion.outputs.revision}}, LocalMain = ${{steps.LocalVersion.outputs.main}}"
 
             
             
