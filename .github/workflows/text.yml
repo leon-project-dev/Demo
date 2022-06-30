@@ -90,7 +90,7 @@ jobs:
         - name: ls -a via ssh
           uses: garygrossgarten/github-action-ssh@release
           with:
-            command: powershell python ./publish.py
+            command: powershell cd /;cd py;python ./check.py c:/pub/version/Action-wpf/developer 7
             host: ${{secrets.SSH_HOST}}
             port: ${{secrets.SSH_PORT}}
             username: ${{secrets.SSH_USER_NAME}}
