@@ -69,7 +69,7 @@ jobs:
                echo "::set-output name=revision::1"
         
         - name: echo version 
-          run: echo "RemoteMain =${{steps.RemoteVersion.outputs.main}}, RemoteRevision =(${{steps.RemoteVersion.outputs.revision}} + 1), LocalMain = ${{steps.LocalVersion.outputs.main}}"
+          run: echo "RemoteMain =${{steps.RemoteVersion.outputs.main}}, RemoteRevision =$(${{steps.RemoteVersion.outputs.revision}} + 1), LocalMain = ${{steps.LocalVersion.outputs.main}}"
 
             
             
