@@ -26,8 +26,8 @@ jobs:
     runs-on: windows-latest    
     
     env:
-      SolutionName: Action-wpf
-      DefaultVersion: 1.0.0,1
+      SolutionName: Action-wpf      
+      DefaultVersion: 1.0.0,0
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:     
@@ -49,34 +49,33 @@ jobs:
         # 获取远程版本文件
         - name: Get Version
           run: Invoke-WebRequest -Uri ${{secrets.VERSION_FILE_URL}} -OutFile ./version.txt
+          
+        
+        # 将正式的版本号写到新的文件中，然后再读取
+        - name: Wrire File
+          run: $env:DefaultVersion >> PrevVersion.txt
+
+        - name: Wirte Remote Version
+          if: ${{steps.RemoteVersionFile.outputs.content}} != ${{null}}                  
+          run: rm -r CurVersion.txt;$(Get-Content ./version.txt) >> PrevVersion.txt
 
         - name: Read Version File
-          id: RemoteVersionFile
-          run: echo "::set-output name=content::$(Get-Content ./version.txt)"
-       
-        - name: echo version
-          run: echo "${{steps.RemoteVersionFile.outputs.content}}"
-
-        - name: Get Remote Version
-          id: RemoteVersion
+          id: PrevVersionFile
+          run: echo "::set-output name=content::$(Get-Content ./PrevVersion.txt)"
+        
+        - name: Get Prev Version
+          id: PrevVersion
           if: ${{steps.RemoteVersionFile.outputs.content}} != ${{null}}                  
-          run: echo "::set-output name=main::$(({${{steps.RemoteVersionFile.outputs.content}}} -split ',')[0])" 
-               echo "::set-output name=revision::$(({${{steps.RemoteVersionFile.outputs.content}}} -split ',')[1])"
-          
-        - name: Get Loacl Version
-          id: RemoteVersion 
-          if:  ${{steps.RemoteVersionFile.outputs.content}} == ${{null}}                  
-          run: echo "::set-output name=main::1.0.0" 
-               echo "::set-output name=revision::1"
-        
-        - name: echo version 
-          run: echo "RemoteMain =${{steps.RemoteVersion.outputs.main}}, RemoteRevision =$(${{steps.RemoteVersion.outputs.revision}} + 1), LocalMain = ${{steps.LocalVersion.outputs.main}}"
+          run: echo "::set-output name=main::$(({${{steps.PrevVersionFile.outputs.content}}} -split ',')[0])" 
+               echo "::set-output name=revision::$(({${{steps.PrevVersionFile.outputs.content}}} -split ',')[1])"
 
-        #- name: Current Version
+        - name: Get Current Version
+          id: CurrentVersion 
+          run: echo "::set-output name=main::${{steps.PrevVersion.outputs.main}}" 
+               echo "::set-output name=revision::$(${{steps.PrevVersion.outputs.revision}} + 1)" 
           
-
-            
-        
+        - name: echo version
+          run: echo "main=${{steps.CurrentVersion.outputs.main}}, revision = ${{steps.CurrentVersion.outputs.revision}}"
         #- name: Check
         #  uses: garygrossgarten/github-action-ssh@release
         #  with:
