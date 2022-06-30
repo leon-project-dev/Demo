@@ -14,8 +14,6 @@ on:
   #  paths-ignore: ["**/*.txt","**/*.md", "LICENSE", "**/*.xmind", "**/*.doc", "**/*.docx", "**/*.yml", "**/*.ymal"]
   
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -33,6 +31,8 @@ jobs:
     env:
       Solution_Name: Action-wpf
       InstallUrl: http://124.223.33.67:16480/update/Action-wpf/developer/
+      # 默认版本号, 如果检测远程服务器没有版本信息, 就使用默认的版本号
+      DefaultVersion: 1.0.0.1
 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -62,11 +62,36 @@ jobs:
         run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
         env:
           Configuration: ${{ matrix.configuration }}
+     
       
-      # dev 使用时间戳作为版本号
-      - name: Get Version
+      - name: Get DefaultVersion
         id: version
-        run: echo "::set-output name=today::$(Get-Date -Format 'MdHm')"
+        run: echo "::set-output name=today::${{env.DefaultVersion}}"
+
+       #获取远程版本文件
+      - name: Get Version
+        run: Invoke-WebRequest -Uri ${{secrets.VERSION_FILE_URL}} -OutFile ./version.txt
+
+      - name: Read Version File
+        id: RemoteVersionFile
+        run: echo "::set-output name=content::$(Get-Content ./version.txt)"
+       
+
+      - name: Get Remote Version
+        id: RemoteVersion
+        if: ${{steps.RemoteVersionFile.outputs.content}} != ${{null}}                  
+        run: echo "::set-output name=main::$(({${{steps.RemoteVersionFile.outputs.content}}} -split ',')[0])" 
+               echo "::set-output name=revision::$(({${{steps.RemoteVersionFile.outputs.content}}} -split ',')[1])"
+          
+      - name: Get Loacl Version
+        id: LocalVersion 
+        if:  ${{steps.RemoteVersionFile.outputs.content}} == ${{null}}                  
+        run: echo "::set-output name=main::$(({${{env.DefaultVersion}}} -split ',')[0])" 
+             echo "::set-output name=revision::$(({${{env.DefaultVersion}}} -split ',')[1])"
+
+            
+
+     
       
       - name: Get Display Folder
         id: folder
@@ -75,15 +100,16 @@ jobs:
       - name: Save Solution Name
         id: solution
         run: echo "::set-output name=name::${{env.Solution_Name}}"
+      
         
-      # 指定版本号，输出目录，更新地址
+      # 指定版本号，输出目录，更新地址  65536
       - name: public ClickOnce
         run: msbuild $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationRevision=${{steps.version.outputs.today}} /p:InstallUrl=$env:InstallUrl /p:Configuration=Debug 
       
-      - uses: actions/upload-artifact@v3
-        with:
-            name: package
-            path: pub/
+      #- uses: actions/upload-artifact@v3
+      #  with:
+      #      name: package
+      #      path: pub/
 
       - name: deploy file to server version
         uses:  SamKirkland/FTP-Deploy-Action@4.3.0
@@ -109,10 +135,6 @@ jobs:
           # 发布到 更新地址
           server-dir: './update/${{steps.solution.outputs.name}}/developer/'          
       
-      # build
-      - name: build 
-        run: msbuild  $env:Solution_Name
-
       - name: notify build failure
         uses: tokorom/action-slack-incoming-webhook@main
         env:

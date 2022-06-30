@@ -51,13 +51,13 @@ def DeleteOldFolder(path: str):
 def GetVersion(folderName: str):
     names = folderName.split('-')
     if len(names) != 2:
-        raise RuntimeError("文件夹命名不合法, folder: " + folderName)
+        raise RuntimeError(f"文件夹命名不合法, folder: {folderName}")
     
     verStr = names[1]
     # 检测version的合法性
     vers = verStr.split('.')
     if len(vers) != 4:
-        raise RuntimeError("文件夹命名不合法, folder: " + folderName)
+        raise RuntimeError(f"文件夹命名不合法, folder: {folderName}" )
 
     return f'{vers[0]}.{vers[1]}.{vers[2]}', vers[3]    
 
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     mainVesion, revisionVersion = GetVersion(dirName)
 
     # 将主版本和修订版本写到文件中
-    fo = open("c:/pub/verison.txt", "w+")
+    fo = open("c:/pub/version.txt", "w+")
     fo.write( f'{mainVesion},{revisionVersion}')
     print("!!!执行完成!!!")
 
