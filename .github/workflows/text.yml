@@ -26,24 +26,51 @@ jobs:
     runs-on: windows-latest    
     
     env:
-      Solution_Name: Action-wpf
+      SolutionName: Action-wpf
+      DefaultVersion: 1.0.0,1
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:     
-        - name: Dump GitHub context
-          id: github_context_step
-          run: echo '${{ toJSON(github) }}'
-        - name: Dump job context
-          run: echo '${{ toJSON(job) }}'
-        - name: Dump steps context
-          run: echo '${{ toJSON(steps) }}'
-        - name: Dump runner context
-          run: echo '${{ toJSON(runner) }}'
-        - name: Dump strategy context
-          run: echo '${{ toJSON(strategy) }}'
-        - name: Dump matrix context
-          run: echo '${{ toJSON(matrix) }}'
+        #- name: Dump GitHub context
+        #  id: github_context_step
+        #  run: echo '${{ toJSON(github) }}'
+        #- name: Dump job context
+        #  run: echo '${{ toJSON(job) }}'
+        #- name: Dump steps context
+        #  run: echo '${{ toJSON(steps) }}'
+        #- name: Dump runner context
+        #  run: echo '${{ toJSON(runner) }}'
+        #- name: Dump strategy context
+        #  run: echo '${{ toJSON(strategy) }}'
+        #- name: Dump matrix context
+        #  run: echo '${{ toJSON(matrix) }}'
         
+        # 获取远程版本文件
+        - name: Get Version
+          run: Invoke-WebRequest -Uri http://124.223.33.67:16480/version.txt  -OutFile ./version.txt
+
+        - name: Read Version File
+          id: RemoteVersionFile
+          run: echo "::set-output name=content::$(Get-Content ./version.txt)"
+
+        - if: ${{steps.RemoteVersionFile.outputs.content}} == ""
+        - name: Get Version
+          id: Version
+          run: echo "::set-output name=main::${{steps.RemoteVersionFile.outputs.content}} -split ','[0]" |
+               echo "::set-output name=revision::${{steps.RemoteVersionFile.outputs.content}} -split ','[1]"
+        - if: ${{steps.RemoteVersionFile.outputs.content}} != ""
+        - name: Get Version
+          id: Version          
+          run: echo "::set-output name=main::$env:DefaultVersion -split ','[0]" |
+               echo "::set-output name=revision::$env:DefaultVersion -split ','[1]"
+          
+               
+
+        - name: echo version 
+          run: echo " main =${{steps.Version.outputs.main}} revision =${{steps.Version.outputs.revision}}"
+
+            
+            
         
        
         
