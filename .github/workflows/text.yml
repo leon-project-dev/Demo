@@ -53,17 +53,13 @@ jobs:
           id: RemoteVersionFile
           run: echo "::set-output name=content::$(Get-Content ./version.txt)"
 
-        - name: Get Version
-          id: Version
-        - if: ${{steps.RemoteVersionFile.outputs.content}} == ""                  
+        - name: Get Remote Version
+          id: RemoteVersion
+          if: ${{steps.RemoteVersionFile.outputs.content}} != ""                  
           run: echo "::set-output name=main::${{steps.RemoteVersionFile.outputs.content}} -split ','[0]" |
                echo "::set-output name=revision::${{steps.RemoteVersionFile.outputs.content}} -split ','[1]"
-        - if: ${{steps.RemoteVersionFile.outputs.content}} != ""                          
-          run: echo "::set-output name=main::$env:DefaultVersion -split ','[0]" |
-               echo "::set-output name=revision::$env:DefaultVersion -split ','[1]"
           
-               
-
+        
         - name: echo version 
           run: echo " main =${{steps.Version.outputs.main}} revision =${{steps.Version.outputs.revision}}"
 
