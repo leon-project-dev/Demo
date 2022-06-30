@@ -59,12 +59,12 @@ jobs:
         - name: Get Remote Version
           id: RemoteVersion
           if: ${{steps.RemoteVersionFile.outputs.content}} != ""                  
-          run: echo "::set-output name=main::${{steps.RemoteVersionFile.outputs.content -split ','[0]}}" 
-               echo "::set-output name=revision::${{steps.RemoteVersionFile.outputs.content -split ','[1]}}"
+          run: echo "::set-output name=main::${{steps.RemoteVersionFile.outputs.content}} -split ','[0]" 
+               echo "::set-output name=revision::${{steps.RemoteVersionFile.outputs.content}} -split ','[1]"
           
         
         - name: echo version 
-          run: echo " main =${{steps.Version.outputs.main}} \n revision =${{steps.Version.outputs.revision}}"
+          run: echo " main =${{steps.RemoteVersion.outputs.main}} \n revision =${{steps.RemoteVersion.outputs.revision}}"
 
             
             
