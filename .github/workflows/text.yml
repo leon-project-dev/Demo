@@ -47,54 +47,44 @@ jobs:
         
 
         # 获取远程版本文件
-        #- name: Get Version
-        #  run: Invoke-WebRequest -Uri ${{secrets.VERSION_FILE_URL}} -OutFile ./version.txt
+        - name: Get Version
+          run: Invoke-WebRequest -Uri ${{secrets.VERSION_FILE_URL}} -OutFile ./version.txt
 
-        #- name: Read Version File
-        #  id: RemoteVersionFile
-        #  run: echo "::set-output name=content::$(Get-Content ./version.txt)"
+        - name: Read Version File
+          id: RemoteVersionFile
+          run: echo "::set-output name=content::$(Get-Content ./version.txt)"
        
-        #- name: echo version
-        #  run: echo "${{steps.RemoteVersionFile.outputs.content}}"
+        - name: echo version
+          run: echo "${{steps.RemoteVersionFile.outputs.content}}"
 
-        #- name: Get Remote Version
-        #  id: RemoteVersion
-        #  if: ${{steps.RemoteVersionFile.outputs.content}} != ${{null}}                  
-        #  run: echo "::set-output name=main::$(({${{steps.RemoteVersionFile.outputs.content}}} -split ',')[0])" 
-        #       echo "::set-output name=revision::$(({${{steps.RemoteVersionFile.outputs.content}}} -split ',')[1])"
+        - name: Get Remote Version
+          id: RemoteVersion
+          if: ${{steps.RemoteVersionFile.outputs.content}} != ${{null}}                  
+          run: echo "::set-output name=main::$(({${{steps.RemoteVersionFile.outputs.content}}} -split ',')[0])" 
+               echo "::set-output name=revision::$(({${{steps.RemoteVersionFile.outputs.content}}} -split ',')[1])"
           
-        #- name: Get Loacl Version
-        #  id: LocalVersion 
-        #  if:  ${{steps.RemoteVersionFile.outputs.content}} == ${{null}}                  
-        #  run: echo "::set-output name=main::1.0.0" 
-        #       echo "::set-output name=revision::1"
+        - name: Get Loacl Version
+          id: RemoteVersion 
+          if:  ${{steps.RemoteVersionFile.outputs.content}} == ${{null}}                  
+          run: echo "::set-output name=main::1.0.0" 
+               echo "::set-output name=revision::1"
         
-        #- name: echo version 
-        #  run: echo "RemoteMain =${{steps.RemoteVersion.outputs.main}}, RemoteRevision =$(${{steps.RemoteVersion.outputs.revision}} + 1), LocalMain = ${{steps.LocalVersion.outputs.main}}"
+        - name: echo version 
+          run: echo "RemoteMain =${{steps.RemoteVersion.outputs.main}}, RemoteRevision =$(${{steps.RemoteVersion.outputs.revision}} + 1), LocalMain = ${{steps.LocalVersion.outputs.main}}"
 
+        - name: Current Version
+          
 
             
-            
         
-       
-        
-        #- name: executing remote ssh commands using password
-        #  uses: appleboy/ssh-action@master
+        #- name: Check
+        #  uses: garygrossgarten/github-action-ssh@release
         #  with:
-        #    host: "124.223.33.67"
-        #    username: "Administrator"
-        #    password: "7iQrzu1miQvcdPcC"
-        #    port: "8092"
-        #    script: powershell 
-
-        - name: ls -a via ssh
-          uses: garygrossgarten/github-action-ssh@release
-          with:
-            command: powershell cd /;cd py;python ./check.py c:/pub/version/Action-wpf/developer 7
-            host: ${{secrets.SSH_HOST}}
-            port: ${{secrets.SSH_PORT}}
-            username: ${{secrets.SSH_USER_NAME}}
-            password : ${{secrets.SSH_USER_PWD}}
+        #    command: powershell cd /;cd py;python ./check.py c:/pub/version/Action-wpf/developer 7
+        #    host: ${{secrets.SSH_HOST}}
+        #    port: ${{secrets.SSH_PORT}}
+        #    username: ${{secrets.SSH_USER_NAME}}
+        #    password : ${{secrets.SSH_USER_PWD}}
             
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       
