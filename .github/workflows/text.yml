@@ -62,7 +62,7 @@ jobs:
           run: $env:DefaultVersion >> PrevVersion.txt
 
         - name: Wirte Remote Version
-          if: ${{steps.RemoteVersionFile.outputs.content != ${{null}}}}                  
+          if: ${{steps.RemoteVersionFile.outputs.content != null}}                  
           run: rm -r PrevVersion.txt;$(Get-Content ./version.txt) >> PrevVersion.txt
 
         - name: Read Version File
