@@ -52,6 +52,9 @@ jobs:
         - name: Read Version File
           id: RemoteVersionFile
           run: echo "::set-output name=content::$(Get-Content ./version.txt)"
+       
+        - name: echo version
+          run: echo ${{steps.RemoteVersionFile.outputs.content}}
 
         - name: Get Remote Version
           id: RemoteVersion
