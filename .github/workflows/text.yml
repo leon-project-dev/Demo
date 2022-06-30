@@ -78,7 +78,7 @@ jobs:
           
         - name: Get Version String
           id: VersionStr
-          run: echo "::set-output name=version::$([String]::Format("{0}.{1}", ${{steps.CurrentVersion.outputs.main}},${{steps.CurrentVersion.outputs.revision}}))"
+          run: echo "::set-output name=version::$([String]::Format("{0}.{1}", '${{steps.CurrentVersion.outputs.main}}', '${{steps.CurrentVersion.outputs.revision}}'))"
 
         - name: echo version
           run: echo "main=${{steps.CurrentVersion.outputs.main}}, revision = ${{steps.CurrentVersion.outputs.revision}}, verion=${{steps.VersionStr.outputs.version}}"
