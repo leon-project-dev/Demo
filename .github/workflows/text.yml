@@ -47,10 +47,10 @@ jobs:
         
 
         # 获取远程版本文件
-        - name: Get Version
+        - name: Get Remote Version
           run: Invoke-WebRequest -Uri ${{secrets.VERSION_FILE_URL}} -OutFile ./version.txt
           
-        - name: Read Version File
+        - name: Read Remote Version File
           id: RemoteVersionFile
           run: echo "::set-output name=content::$(Get-Content ./version.txt)"
 
