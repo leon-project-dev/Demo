@@ -67,8 +67,7 @@ jobs:
           run: echo "::set-output name=content::$(Get-Content ./PrevVersion.txt)"
         
         - name: Get Prev Version
-          id: PrevVersion
-          if: ${{steps.RemoteVersionFile.outputs.content}} != ${{null}}                  
+          id: PrevVersion                         
           run: echo "::set-output name=main::$(({${{steps.PrevVersionFile.outputs.content}}} -split ',')[0])" 
                echo "::set-output name=revision::$(({${{steps.PrevVersionFile.outputs.content}}} -split ',')[1])"
 
