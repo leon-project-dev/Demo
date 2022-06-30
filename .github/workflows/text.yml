@@ -54,6 +54,9 @@ jobs:
           id: RemoteVersionFile
           run: echo "::set-output name=content::$(Get-Content ./version.txt)"
 
+        - name: echo remote file content
+          run: echo " fileContent = ${{steps.RemoteVersionFile.outputs.content}}"
+
         # 将正式的版本号写到新的文件中，然后再读取
         - name: Wrire File
           run: $env:DefaultVersion >> PrevVersion.txt
