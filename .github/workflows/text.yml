@@ -64,7 +64,7 @@ jobs:
           
         
         - name: echo version 
-          run: echo " main =${{steps.Version.outputs.main}} revision =${{steps.Version.outputs.revision}}"
+          run: echo " main =${{steps.Version.outputs.main}} \n revision =${{steps.Version.outputs.revision}}"
 
             
             
