@@ -72,7 +72,7 @@ jobs:
         - name: echo version 
           run: echo "RemoteMain =${{steps.RemoteVersion.outputs.main}}, RemoteRevision =$(${{steps.RemoteVersion.outputs.revision}} + 1), LocalMain = ${{steps.LocalVersion.outputs.main}}"
 
-        - name: Current Version
+        #- name: Current Version
           
 
             
