@@ -29,7 +29,7 @@ jobs:
     # windows-latest 
     
     env:
-      Solution_Name: Action-wpf
+      SolutionName: Action-wpf
       InstallUrl: http://124.223.33.67:16480/update/Action-wpf/developer/
       # 默认版本号, 如果检测远程服务器没有版本信息, 就使用默认的版本号
       DefaultVersion: 1.0.0.1
@@ -59,53 +59,66 @@ jobs:
       
       # Restore the application to populate the obj folder with RuntimeIdentifiers
       - name: Restore the application
-        run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+        run: msbuild $env:SolutionName /t:Restore /p:Configuration=$env:Configuration
         env:
           Configuration: ${{ matrix.configuration }}
-     
-      
-      - name: Get DefaultVersion
-        id: version
-        run: echo "::set-output name=today::${{env.DefaultVersion}}"
-
-       #获取远程版本文件
-      - name: Get Version
-        run: Invoke-WebRequest -Uri ${{secrets.VERSION_FILE_URL}} -OutFile ./version.txt
-
-      - name: Read Version File
-        id: RemoteVersionFile
-        run: echo "::set-output name=content::$(Get-Content ./version.txt)"
-       
-
-      - name: Get Remote Version
-        id: RemoteVersion
-        if: ${{steps.RemoteVersionFile.outputs.content}} != ${{null}}                  
-        run: echo "::set-output name=main::$(({${{steps.RemoteVersionFile.outputs.content}}} -split ',')[0])" 
-               echo "::set-output name=revision::$(({${{steps.RemoteVersionFile.outputs.content}}} -split ',')[1])"
-          
-      - name: Get Loacl Version
-        id: LocalVersion 
-        if:  ${{steps.RemoteVersionFile.outputs.content}} == ${{null}}                  
-        run: echo "::set-output name=main::$(({${{env.DefaultVersion}}} -split ',')[0])" 
-             echo "::set-output name=revision::$(({${{env.DefaultVersion}}} -split ',')[1])"
-
-            
-
-     
-      
-      - name: Get Display Folder
-        id: folder
-        run: echo "::set-output name=name::$(Get-Date -Format 'yyyyMMddHHmmss')"
 
       - name: Save Solution Name
         id: solution
-        run: echo "::set-output name=name::${{env.Solution_Name}}"
+        run: echo "::set-output name=name::${{env.SolutionName}}"
+     
+      # ssh 检测远程服务器文件夹 并生成版本号
+      - name: Check
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: powershell cd /;cd py;python ./check.py c:/pub/version/${{steps.solution.outputs.name}}/developer 7
+          host: ${{secrets.SSH_HOST}}
+          port: ${{secrets.SSH_PORT}}
+          username: ${{secrets.SSH_USER_NAME}}
+          password : ${{secrets.SSH_USER_PWD}}
       
+      # 获取远程版本文件
+      - name: Get Remote Version File
+        run: Invoke-WebRequest -Uri ${{secrets.VERSION_FILE_URL}} -OutFile ./version.txt
+          
+      - name: Read Remote Version File
+        id: RemoteVersionFile
+        run: echo "::set-output name=content::$(Get-Content ./version.txt)"          
+
+      # 将正式的版本号写到新的文件中，然后再读取
+      - name: Wrire File
+        run: $env:DefaultVersion >> PrevVersion.txt
+
+      - name: Wirte Remote Version
+        if: ${{steps.RemoteVersionFile.outputs.content != null}}                  
+        run: rm -r PrevVersion.txt;$(Get-Content ./version.txt) >> PrevVersion.txt
+
+      - name: Read Version File
+        id: PrevVersionFile
+        run: echo "::set-output name=content::$(Get-Content ./PrevVersion.txt)"
         
-      # 指定版本号，输出目录，更新地址  65536
-      - name: public ClickOnce
-        run: msbuild $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationRevision=${{steps.version.outputs.today}} /p:InstallUrl=$env:InstallUrl /p:Configuration=Debug 
+      - name: Get Prev Version
+        id: PrevVersion                         
+        run: echo "::set-output name=main::$(({${{steps.PrevVersionFile.outputs.content}}} -split ',')[0])" 
+             echo "::set-output name=revision::$(({${{steps.PrevVersionFile.outputs.content}}} -split ',')[1])"
+
+      - name: Get Current Version
+        id: CurrentVersion 
+        run: echo "::set-output name=main::${{steps.PrevVersion.outputs.main}}" 
+             echo "::set-output name=revision::$(${{steps.PrevVersion.outputs.revision}} + 1)" 
       
+      - name: Get Version String
+        id: VersionStr
+        run: echo "::set-output name=version::$([String]::Format("{0}.{1}", '${{steps.CurrentVersion.outputs.main}}','${{steps.CurrentVersion.outputs.revision}}'))"
+
+      - name: Get Display Folder
+        id: folder
+        run: echo "::set-output name=name::$([String]::Format("{0}.{1}", '$(Get-Date -Format 'yyyyMMddHHmmss')','${{steps.VersionStr.outputs.version}}')"
+        
+      # 指定版本号，输出目录，更新地址
+      - name: public ClickOnce
+        run: msbuild $env:SolutionName /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=${{steps.VersionStr.outputs.version}} /p:InstallUrl=$env:InstallUrl /p:Configuration=Debug 
+        
       #- uses: actions/upload-artifact@v3
       #  with:
       #      name: package
