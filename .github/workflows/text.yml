@@ -65,11 +65,11 @@ jobs:
         - name: Get Loacl Version
           id: LocalVersion 
           if:  ${{steps.RemoteVersionFile.outputs.content}} == ${{null}}                  
-          run: echo "::set-output name=main::100" 
-               echo "::set-output name=revision::200"
+          run: echo "::set-output name=main::1.0.0" 
+               echo "::set-output name=revision::1"
         
         - name: echo version 
-          run: echo "RemoteMain =${{steps.RemoteVersion.outputs.main}}, RemoteRevision =${{steps.RemoteVersion.outputs.revision}}, LocalMain = ${{steps.LocalVersion.outputs.main}}"
+          run: echo "RemoteMain =${{steps.RemoteVersion.outputs.main}}, RemoteRevision =(${{steps.RemoteVersion.outputs.revision}} + 1), LocalMain = ${{steps.LocalVersion.outputs.main}}"
 
             
             
