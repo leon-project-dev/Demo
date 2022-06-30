@@ -118,7 +118,7 @@ jobs:
 
       - name: Get Display Folder
         id: folder
-        run: echo "::set-output name=name::$([String]::Format("{0}.{1}", '$(Get-Date -Format 'yyyyMMddHHmmss')','${{steps.VersionStr.outputs.version}}'))"
+        run: echo "::set-output name=name::$([String]::Format("{0}.{1}", $(Get-Date -Format 'yyyyMMddHHmmss'),'${{steps.VersionStr.outputs.version}}'))"
         
       # 指定版本号，输出目录，更新地址
       - name: public ClickOnce
