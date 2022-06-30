@@ -47,15 +47,12 @@ jobs:
         
 
         # 获取远程版本文件
-        - name: Get Remote Version
+        - name: Get Remote Version File
           run: Invoke-WebRequest -Uri ${{secrets.VERSION_FILE_URL}} -OutFile ./version.txt
           
         - name: Read Remote Version File
           id: RemoteVersionFile
-          run: echo "::set-output name=content::$(Get-Content ./version.txt)"
-
-        - name: echo remote file content
-          run: echo " fileContent = ${{steps.RemoteVersionFile.outputs.content}}"
+          run: echo "::set-output name=content::$(Get-Content ./version.txt)"          
 
         # 将正式的版本号写到新的文件中，然后再读取
         - name: Wrire File
@@ -79,8 +76,13 @@ jobs:
           run: echo "::set-output name=main::${{steps.PrevVersion.outputs.main}}" 
                echo "::set-output name=revision::$(${{steps.PrevVersion.outputs.revision}} + 1)" 
           
+        - name: Get Version String
+          id: VersionStr
+          run: echo "::set-output name=version::$([String]::Format("{0}.{1}", ${{steps.CurrentVersion.outputs.revision}},${{steps.CurrentVersion.outputs.revision}}))"
+
         - name: echo version
-          run: echo "main=${{steps.CurrentVersion.outputs.main}}, revision = ${{steps.CurrentVersion.outputs.revision}}"
+          run: echo "main=${{steps.CurrentVersion.outputs.main}}, revision = ${{steps.CurrentVersion.outputs.revision}}, verion=${{steps.VersionStr.outputs.version}}"
+
         #- name: Check
         #  uses: garygrossgarten/github-action-ssh@release
         #  with:
