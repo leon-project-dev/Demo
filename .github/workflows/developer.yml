@@ -37,8 +37,7 @@ jobs:
       SolutionName: Action-wpf
       # 默认版本号, 如果检测远程服务器没有版本信息, 就使用默认的版本号
       DefaultVersion: 1.0.0,0
-
-
+      
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:      
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -76,11 +75,11 @@ jobs:
         id: InstallUrl
         run: echo "::set-output name=url::$([String]::Format("${{secrets.APP_UPDATE_URL_ROOT}}/update/{0}/developer/", '${{env.SolutionName}}'))"
      
-      # ssh 检测远程服务器上是否存在版本文件，不存在则创建
+      # ssh 检测远程服务器上是否存在版本文件，不存在则创建 
       - name: Publish
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: powershell cd /;cd script;python ./create-verion-file.py c:/pub/version.txt
+          command: powershell cd /;cd script;python ./create-verion-file.py c:/pub/version.txt c:/pub/version/${{steps.solution.outputs.name}}/developer
           host: ${{secrets.SSH_HOST}}
           port: ${{secrets.SSH_PORT}}
           username: ${{secrets.SSH_USER_NAME}}
