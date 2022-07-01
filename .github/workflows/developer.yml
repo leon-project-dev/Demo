@@ -76,11 +76,11 @@ jobs:
         id: InstallUrl
         run: echo "::set-output name=url::$([String]::Format("${{secrets.APP_UPDATE_URL_ROOT}}/update/{0}/developer/", '${{env.SolutionName}}'))"
      
-      # ssh 检测远程服务器文件夹 并生成版本号
+      # ssh 检测远程服务器上是否存在版本文件，不存在则创建
       - name: Publish
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: powershell cd /;cd script;python ./publish.py c:/pub/version/${{steps.solution.outputs.name}}/developer 7
+          command: powershell cd /;cd script;python ./create-verion-file.py c:/pub/version.txt
           host: ${{secrets.SSH_HOST}}
           port: ${{secrets.SSH_PORT}}
           username: ${{secrets.SSH_USER_NAME}}
@@ -151,31 +151,20 @@ jobs:
           password: ${{ secrets.FILE_SERVER_USER_PWD }} 
           local-dir: './pub/'
           # 发布到版本管理地址
-          server-dir: './version/${{steps.solution.outputs.name}}/developer/${{steps.folder.outputs.name}}/'          
+          server-dir: './version/${{steps.solution.outputs.name}}/developer/${{steps.folder.outputs.name}}/'    
       
-      #- name: deploy file to server update
-      #  uses:  SamKirkland/FTP-Deploy-Action@4.3.0
-      #  with:            
-      #    server: ${{ secrets.FILE_SERVER_IP }}
-      #    port: ${{ secrets.FILE_SERVER_PORT }}
-      #    protocol: ftps
-      #    username: ${{ secrets.FILE_SERVER_USER_NAME }}  
-      #    password: ${{ secrets.FILE_SERVER_USER_PWD }} 
-      #    local-dir: './pub/'
-      #    # 发布到 更新地址
-      #    server-dir: './update/${{steps.solution.outputs.name}}/developer/'  
       
-      # ssh 复制最新的跟新文件到更新文件夹
+      # ssh 复制最新的版本文件到更新文件夹
       - name: Copy File
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: powershell cd /;cd script;.\copy-res.bat ${{steps.solution.outputs.name}} developer ${{steps.folder.outputs.name}}
+          command: powershell cd /;cd script;.\copy-res.bat ${{steps.solution.outputs.name}} developer ${{steps.folder.outputs.name}} 7
           host: ${{secrets.SSH_HOST}}
           port: ${{secrets.SSH_PORT}}
           username: ${{secrets.SSH_USER_NAME}}
           password : ${{secrets.SSH_USER_PWD}}
 
-      
+
       - name: notify build failure
         uses: tokorom/action-slack-incoming-webhook@main
         env:
