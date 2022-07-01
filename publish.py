@@ -64,16 +64,6 @@ def SaveVersion(content: str):
     fs.write(content)
     fs.close()
 
-# 检测之前是否有编译失败的情况，主要检查配置版本文件内容和文件夹版本号是否相同，相同说明之前编译就失败
-# 删除文件夹中最新的版本文件夹
-def CheckPreBuild(path: str):
-    versionPath = "c:/pub/version.txt"
-    if os.path.exists(versionPath):
-        fs = open(versionPath, "r+")
-        line = fs.readline()        
-        if GetVersion(path) == line:            # 之前发布有失败，删除最新的文件夹
-            DeleteNewFolder(path)    
-
 # 文件夹命名规则： 日期-版本号  版本号：1.1.1.1
 # 返回前面是大版本，后面是小版本
 def GetVersion(folderName: str):
@@ -110,7 +100,6 @@ if __name__ == "__main__":
             SaveVersion("")
         else:
             
-            CheckPreBuild(checkDir)
 
             # 检查当前文件夹的文件夹个数
             if folders > dirTotal:
