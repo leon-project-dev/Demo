@@ -123,7 +123,15 @@ jobs:
       - name: Get Display Folder
         id: folder
         run: echo "::set-output name=name::$([String]::Format("{0}-{1}", $(Get-Date -Format 'yyyyMMddHHmmss'),'${{steps.VersionStr.outputs.version}}'))"
-        
+      
+      # 清空项目
+      - name: Clean 
+        run: msbuild $env:SolutionName /t:clean
+     
+      # 删除发布目录
+      - name: Delete puc dir
+        run: rm -r pub
+
       # 指定版本号，输出目录，更新地址
       - name: public ClickOnce
         run: msbuild $env:SolutionName /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=${{steps.VersionStr.outputs.version}} /p:InstallUrl=${{steps.InstallUrl.outputs.url}} /p:Configuration=Debug 
@@ -161,7 +169,7 @@ jobs:
       - name: Copy File
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: powershell cd /;cd script;.\copy-publish.bat ${{steps.solution.outputs.name}} developer ${{steps.folder.outputs.name}}
+          command: powershell cd /;cd script;.\copy-res.bat ${{steps.solution.outputs.name}} developer ${{steps.folder.outputs.name}}
           host: ${{secrets.SSH_HOST}}
           port: ${{secrets.SSH_PORT}}
           username: ${{secrets.SSH_USER_NAME}}
