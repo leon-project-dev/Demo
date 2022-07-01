@@ -80,7 +80,7 @@ jobs:
       - name: Publish
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: powershell cd /;cd py;python ./publish.py c:/pub/version/${{steps.solution.outputs.name}}/developer 7
+          command: powershell cd /;cd script;python ./publish.py c:/pub/version/${{steps.solution.outputs.name}}/developer 7
           host: ${{secrets.SSH_HOST}}
           port: ${{secrets.SSH_PORT}}
           username: ${{secrets.SSH_USER_NAME}}
@@ -161,7 +161,7 @@ jobs:
       - name: Copy File
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: powershell cd /;cd bat;.\copy-publish.bat ${{steps.solution.outputs.name}} developer ${{steps.folder.outputs.name}}
+          command: powershell cd /;cd script;.\copy-publish.bat ${{steps.solution.outputs.name}} developer ${{steps.folder.outputs.name}}
           host: ${{secrets.SSH_HOST}}
           port: ${{secrets.SSH_PORT}}
           username: ${{secrets.SSH_USER_NAME}}
