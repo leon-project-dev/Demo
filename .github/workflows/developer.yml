@@ -35,9 +35,8 @@ jobs:
     
     env:
       SolutionName: Action-wpf
-      InstallUrl: http://124.223.33.67:16480/update/Action-wpf/developer/
       # 默认版本号, 如果检测远程服务器没有版本信息, 就使用默认的版本号
-      DefaultVersion: 1.0.0.1
+      DefaultVersion: 1.0.0,0
 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -71,6 +70,11 @@ jobs:
       - name: Save Solution Name
         id: solution
         run: echo "::set-output name=name::${{env.SolutionName}}"
+
+     # 更新地址
+      - name: Save Update Url
+        id: InstallUrl
+        run: echo "::set-output name=url::$([String]::Format("${{secrets.APP_UPDATE_URL_ROOT}}/update/{0}/developer/", '${{env.SolutionName}}'))"
      
       # ssh 检测远程服务器文件夹 并生成版本号
       - name: Check
@@ -122,7 +126,7 @@ jobs:
         
       # 指定版本号，输出目录，更新地址
       - name: public ClickOnce
-        run: msbuild $env:SolutionName /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=${{steps.VersionStr.outputs.version}} /p:InstallUrl=$env:InstallUrl /p:Configuration=Debug 
+        run: msbuild $env:SolutionName /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=${{steps.VersionStr.outputs.version}} /p:InstallUrl=${{steps.InstallUrl.outputs.url}} /p:Configuration=Debug 
         
       #- uses: actions/upload-artifact@v3
       #  with:
