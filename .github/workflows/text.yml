@@ -83,6 +83,13 @@ jobs:
         - name: echo version
           run: echo "main=${{steps.CurrentVersion.outputs.main}}, revision = ${{steps.CurrentVersion.outputs.revision}}, verion=${{steps.VersionStr.outputs.version}}"
 
+        # ¸üÐÂµØÖ·
+        - name: Save Update Url
+          id: InstallUrl
+          run: echo "::set-output name=url::$([String]::Format("${{secrets.APP_UPDATE_URL_ROOT}}/update/{0}/developer/", ${{env.SolutionName}}))"
+
+        - name: echo install url
+          run: echo "install url=${{steps.InstallUrl.outputs.url}}"
         #- name: Check
         #  uses: garygrossgarten/github-action-ssh@release
         #  with:
