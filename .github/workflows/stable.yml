@@ -39,8 +39,9 @@ jobs:
     # windows-latest 
     
     env:
-      Solution_Name: Action-wpf    
-      InstallUrl: http://124.223.33.67:16480/update/Action-wpf/stable/
+      SolutionName: Action-wpf          
+      # 远程服务器根目录
+      RemoteRootPath: c:/pub/    
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:      
@@ -66,9 +67,18 @@ jobs:
       
       # Restore the application to populate the obj folder with RuntimeIdentifiers
       - name: Restore the application
-        run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+        run: msbuild $env:SolutionName /t:Restore /p:Configuration=$env:Configuration
         env:
           Configuration: ${{ matrix.configuration }}
+     
+      - name: Save Solution Name
+        id: solution
+        run: echo "::set-output name=name::${{env.SolutionName}}"
+
+     # 更新地址
+      - name: Save Update Url
+        id: InstallUrl
+        run: echo "::set-output name=url::$([String]::Format("${{secrets.APP_UPDATE_URL_ROOT}}/update/{0}/stable/", '${{env.SolutionName}}'))"
       
       - name: Get Display Folder
         id: folder
@@ -76,7 +86,7 @@ jobs:
 
       - name: Save Solution Name
         id: solution
-        run: echo "::set-output name=name::${{env.Solution_Name}}"   
+        run: echo "::set-output name=name::${{env.SolutionName}}"   
         
       - name: save IP
         id: server
@@ -84,12 +94,12 @@ jobs:
         
       # 指定版本号，输出目录，更新地址
       - name: public ClickOnce
-        run: msbuild $env:Solution_Name /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=${{github.event.inputs.Version}} /p:InstallUrl=$env:InstallUrl /p:Configuration=Release
+        run: msbuild $env:SolutionName /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=${{github.event.inputs.Version}} /p:InstallUrl=$env:InstallUrl /p:Configuration=Release
       
-      - uses: actions/upload-artifact@v3
-        with:
-            name: package
-            path: pub/
+      #- uses: actions/upload-artifact@v3
+      #  with:
+      #      name: package
+      #      path: pub/
 
       - name: deploy file to server version 
         uses:  SamKirkland/FTP-Deploy-Action@4.3.0
@@ -103,78 +113,33 @@ jobs:
           # 发布到版本管理地址
           server-dir: './version/${{steps.solution.outputs.name}}/stable/${{github.event.inputs.Version}}/'          
       
-      - name: deploy file to server update
-        uses:  SamKirkland/FTP-Deploy-Action@4.3.0
-        with:            
-          server: ${{ secrets.FILE_SERVER_IP }}
-          port: ${{ secrets.FILE_SERVER_PORT }}
-          protocol: ftps
-          username: ${{ secrets.FILE_SERVER_USER_NAME }}
-          password: ${{ secrets.FILE_SERVER_USER_PWD }} 
-          local-dir: './pub/'
-          # 发布到更新地址
-          server-dir: './update/${{steps.solution.outputs.name}}/stable/'          
-      ## zip
-      #- name: zip 
-      #  run: Compress-Archive -Path .\pub 'pub.zip'
+      # ssh 复制最新的版本文件到更新文件夹
+      - name: Copy File
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          # copy-res.bat： 复制最新版本的资源到更新目录 && 维持版本文件夹个数
+          #  1: 项目的名字 2.发布的目录 3.最新发布的文件夹名 4.版本文夹最多文件个数(可以不傳)
+          command: powershell cd /;cd script;.\copy-res.bat ${{steps.solution.outputs.name}} developer ${{steps.folder.outputs.name}}
+          host: ${{secrets.SSH_HOST}}
+          port: ${{secrets.SSH_PORT}}
+          username: ${{secrets.SSH_USER_NAME}}
+          password : ${{secrets.SSH_USER_PWD}}
+
+      - name: notify build failure
+        uses: tokorom/action-slack-incoming-webhook@main
+        env:
+             INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:             
+             text: "stable build v:${{steps.VersionStr.outputs.version}} failure, check actions log, url: ${{ github.event.repository.url }}/actions/runs/${{ github.run_id }}"             
+        if: failure()
         
-      # TODO:Deploy  
-      #- name: delpoy server
-
-
-      #- name: notify success
-      #  uses: tokorom/action-slack-incoming-webhook@main
-      #  env:
-      #       INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #  with:
-      #       text: "${{github.actor}} build success, pack url: http://www.baidu.com"
-      #       block: 
-      #         -
-      #          - type: header
-      #          -text:
-      #               - 
-                 
-             
-       
-
-            # blocks: |
-            # [
-            #  {
-            #    "type": "header",
-            #    "text": {
-            #      "type": "plain_text",
-            #      "text": "${{ github.event.release.tag_name}} is published!"
-            #    }
-            #  },
-            #  {
-            #    "type": "section",
-            #    "text": {
-            #      "type": "mrkdwn",
-            #      "text": "*Author:*\n${{ github.actor }}"
-            #    }
-            #  },
-            #   {
-            #    "type": "section",
-            #    "text": {
-            #      "type": "mrkdwn",
-            #      "text": "*Information:*"
-            #    }
-            #  },
-            #  {
-            #    "type": "section",
-            #    "text": {
-            #      "type": "mrkdwn",
-            #      "text": ${{ toJSON(github.event.release.body) }}
-            #    }
-            #  },
-            #  {
-            #    "type": "section",
-            #    "text": {
-            #      "type": "mrkdwn",
-            #      "text": "${{ github.event.release.html_url }}"
-            #    }
-            #  }
-            #]
+      - name: notify build success
+        uses: tokorom/action-slack-incoming-webhook@main
+        env:
+             INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+             text: "stable build v:${{steps.VersionStr.outputs.version}} success" 
+        if: success()
      
       
       
