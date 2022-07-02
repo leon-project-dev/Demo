@@ -104,7 +104,7 @@ jobs:
         with:
           # copy-res.bat： 复制最新版本的资源到更新目录 && 维持版本文件夹个数
           #  1: 项目的名字 2.发布的目录 3.最新发布的文件夹名 4.版本文夹最多文件个数(可以不傳)
-          command: powershell cd /;cd script;.\copy-res.bat ${{steps.solution.outputs.name}} developer ${{steps.folder.outputs.name}}
+          command: powershell cd /;cd script;.\copy-res.bat ${{steps.solution.outputs.name}} stable ${{steps.folder.outputs.name}}
           host: ${{secrets.SSH_HOST}}
           port: ${{secrets.SSH_PORT}}
           username: ${{secrets.SSH_USER_NAME}}
