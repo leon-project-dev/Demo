@@ -22,9 +22,8 @@ on:
         description: '版本号，最后一个是修订次数'
         required: true
         default: '1.0.0.1'      
-        
-
   
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -39,9 +38,7 @@ jobs:
     # windows-latest 
     
     env:
-      SolutionName: Action-wpf          
-      # 远程服务器根目录
-      RemoteRootPath: c:/pub/    
+      SolutionName: Action-wpf
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:      
@@ -79,22 +76,10 @@ jobs:
       - name: Save Update Url
         id: InstallUrl
         run: echo "::set-output name=url::$([String]::Format("${{secrets.APP_UPDATE_URL_ROOT}}/update/{0}/stable/", '${{env.SolutionName}}'))"
-      
-      - name: Get Display Folder
-        id: folder
-        run: echo "::set-output name=name::$(Get-Date -Format 'YMdHms')"
-
-      - name: Save Solution Name
-        id: solution
-        run: echo "::set-output name=name::${{env.SolutionName}}"   
-        
-      - name: save IP
-        id: server
-        run: echo "::set-output name=ip::${{secrets.FILE_SERVER_IP }}"   
-        
+ 
       # 指定版本号，输出目录，更新地址
       - name: public ClickOnce
-        run: msbuild $env:SolutionName /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=${{github.event.inputs.Version}} /p:InstallUrl=$env:InstallUrl /p:Configuration=Release
+        run: msbuild $env.SolutionName /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=${{github.event.inputs.Version}} /p:InstallUrl=${{steps.InstallUrl.outputs.url}} /p:Configuration=Release
       
       #- uses: actions/upload-artifact@v3
       #  with:
