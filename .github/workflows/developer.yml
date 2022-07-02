@@ -36,7 +36,11 @@ jobs:
     env:
       SolutionName: Action-wpf
       # 默认版本号, 如果检测远程服务器没有版本信息, 就使用默认的版本号
-      DefaultVersion: 1.0.0,0
+      DefaultVersion: 1.0.0,0      
+      # 远程服务器根目录
+      RemoteRootPath: c:/pub/    
+      # 版本文件夹中最大文件夹数
+      MaxFolders: 7
       
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:      
@@ -69,17 +73,23 @@ jobs:
       - name: Save Solution Name
         id: solution
         run: echo "::set-output name=name::${{env.SolutionName}}"
+        
+      - name: Save Remote Version File Path
+        id: RemoteVersionFilePath
+        run: echo "::set-output name=name::$([String]::Format("{0}/{1}", '${{env.RemoteRootPath}}','version.txt"
 
      # 更新地址
       - name: Save Update Url
         id: InstallUrl
-        run: echo "::set-output name=url::$([String]::Format("${{secrets.APP_UPDATE_URL_ROOT}}/update/{0}/developer/", '${{env.SolutionName}}'))"
+        run: echo "::set-output name=url::$([String]::Format("${{secrets.APP_UPDATE_URL_ROOT}}/update/{0}/{1}/", '${{steps.solution.outputs.name}}', 'developer'))"
      
       # ssh 检测远程服务器上是否存在版本文件，不存在则创建 
       - name: Publish
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: powershell cd /;cd script;python ./create-verion-file.py c:/pub/version.txt c:/pub/version/${{steps.solution.outputs.name}}/developer
+          # create-verion-file: 参数：1.服务器版本文件路径（绝对路径）2. 项目发布的版本文件夹
+          # 功能： 检测当前版本文件是否存在 && 检测之前发布是否有问题          
+          command: powershell cd /;cd script;python ./create-verion-file.py ${{steps.RemoteVersionFilePath.outputs.name}} ${{env.RemoteRootPath}}/version/${{steps.solution.outputs.name}}/developer
           host: ${{secrets.SSH_HOST}}
           port: ${{secrets.SSH_PORT}}
           username: ${{secrets.SSH_USER_NAME}}
@@ -157,7 +167,9 @@ jobs:
       - name: Copy File
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: powershell cd /;cd script;.\copy-res.bat ${{steps.solution.outputs.name}} developer ${{steps.folder.outputs.name}} 7
+          # copy-res.bat： 复制最新版本的资源到更新目录 && 维持版本文件夹个数
+          #  1: 项目的名字 2.发布的目录 3.最新发布的文件夹名 4.版本文夹最多文件个数
+          command: powershell cd /;cd script;.\copy-res.bat ${{steps.solution.outputs.name}} developer ${{steps.folder.outputs.name}} ${{env.MaxFolders}}
           host: ${{secrets.SSH_HOST}}
           port: ${{secrets.SSH_PORT}}
           username: ${{secrets.SSH_USER_NAME}}
