@@ -174,8 +174,7 @@ jobs:
           port: ${{secrets.SSH_PORT}}
           username: ${{secrets.SSH_USER_NAME}}
           password : ${{secrets.SSH_USER_PWD}}
-
-
+          
       - name: notify build failure
         uses: tokorom/action-slack-incoming-webhook@main
         env:
