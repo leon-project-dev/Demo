@@ -76,7 +76,7 @@ jobs:
         
       - name: Save Remote Version File Path
         id: RemoteVersionFilePath
-        run: echo "::set-output name=name::$([String]::Format("{0}/{1}", '${{env.RemoteRootPath}}','version.txt"
+        run: echo "::set-output name=name::$([String]::Format("{0}/{1}", '${{env.RemoteRootPath}}','version.txt)"
 
      # ¸üÐÂµØÖ·
       - name: Save Update Url
