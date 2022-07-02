@@ -76,7 +76,7 @@ jobs:
         
       - name: Save Remote Version File Path
         id: RemoteVersionFilePath
-        run: echo "::set-output name=name::$([String]::Format("{0}/{1}", '${{env.RemoteRootPath}}','version.txt)"
+        run: echo "::set-output name=name::$([String]::Format("{0}/{1}", '${{env.RemoteRootPath}}','version.txt'))"
 
      # ¸üÐÂµØÖ·
       - name: Save Update Url
@@ -180,7 +180,7 @@ jobs:
         env:
              INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:             
-             text: "build v:${{steps.VersionStr.outputs.version}} failure, check actions log, url: ${{ github.event.repository.url }}/actions/runs/${{ github.run_id }}"             
+             text: "developer build v:${{steps.VersionStr.outputs.version}} failure, check actions log, url: ${{ github.event.repository.url }}/actions/runs/${{ github.run_id }}"             
         if: failure()
         
       - name: notify build success
@@ -188,7 +188,7 @@ jobs:
         env:
              INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
-             text: "build v:${{steps.VersionStr.outputs.version}} success" 
+             text: "developer build v:${{steps.VersionStr.outputs.version}} success" 
         if: success()
           
      
