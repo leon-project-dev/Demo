@@ -76,7 +76,16 @@ jobs:
       - name: Save Update Url
         id: InstallUrl
         run: echo "::set-output name=url::$([String]::Format("${{secrets.APP_UPDATE_URL_ROOT}}/update/{0}/stable/", '${{env.SolutionName}}'))"
- 
+      
+
+       # 清空项目
+      - name: Clean 
+        run: msbuild $env:SolutionName /t:clean
+     
+      # 删除发布目录
+      - name: Delete puc dir
+        run: rm -r pub
+       
       # 指定版本号，输出目录，更新地址
       - name: public ClickOnce
         run: msbuild $env.SolutionName /t:publish /p:PublishProfile=Properties/PublishProfiles/ClickOnceProfile.pubxml /p:PublishDir="../pub/" /p:ApplicationVersion=${{github.event.inputs.Version}} /p:InstallUrl=${{steps.InstallUrl.outputs.url}} /p:Configuration=Release
