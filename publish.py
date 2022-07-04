@@ -59,8 +59,8 @@ def DeleteNewFolder(path: str):
     shutil.rmtree(os.path.join(path, dirs[-1]))
 
 # 保存版本
-def SaveVersion(content: str):
-    fs = open("c:/pub/version.txt", "w+")
+def SaveVersion(filePath: str, content: str):
+    fs = open(filePath, "w+")
     fs.write(content)
     fs.close()
 
@@ -82,22 +82,23 @@ def GetVersion(folderName: str):
 # argv[0]： 检测的文件夹路径
 # argv[1]:  当前文件夹最多允许存在的文件夹个数
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        raise ArgumentError("参数个数不合法, 参数个数应该为2个, argv[0] 应该为需要检测的文件夹路径, argv[1] 为当前文件夹最多允许存在的文件夹个数")
+    if len(sys.argv) != 4:
+        raise ArgumentError("参数个数不合法, 参数个数应该为2个, argv[0] 应该为需要检测的文件夹路径, argv[1] 为当前文件夹最多允许存在的文件夹个数, argv[2] 版本文件路径")
 
 
     checkDir = sys.argv[1]
     dirTotal = int(sys.argv[2])
+    remoteVersonPath = sys.argv[3]
 
     if not os.path.exists(checkDir):
         print(f'{checkDir} not exist, is frist publish')
-        SaveVersion("")                                # 当前文件夹目录不存在，说明第一次发布
+        SaveVersion(remoteVersonPath ,"")                                # 当前文件夹目录不存在，说明第一次发布
     else:
 
         folders = GetFileFolderCount(checkDir)
         if folders == 0:                # 当前夹子没有版本文件，为第一次发布
             print(f'{checkDir} exist, but no child dir, is frist publish')
-            SaveVersion("")
+            SaveVersion(remoteVersonPath ,"")
         else:
             
 
@@ -111,7 +112,7 @@ if __name__ == "__main__":
             mainVesion, revisionVersion = GetVersion(dirName)
 
             # 将主版本和修订版本写到文件中
-            SaveVersion(f'{mainVesion},{revisionVersion}')    
+            SaveVersion(remoteVersonPath ,f'{mainVesion},{revisionVersion}')    
             print("!!!run success!!!")
 
 
