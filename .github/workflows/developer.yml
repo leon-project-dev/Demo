@@ -42,7 +42,8 @@ jobs:
       # 版本文件夹中最大文件夹数
       MaxFolders: 7
       # 远程脚本存放根目录
-      RemoteScriptRoot: c:/script/ 
+      RemoteScriptRoot: c:/script/       
+     
       
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:      
@@ -75,12 +76,20 @@ jobs:
       - name: Save Solution Name
         id: solution
         run: echo "::set-output name=name::${{env.SolutionName}}"
+
+      - name: Save Remote Version Name
+        id: RemoteVersionFileName
+        run: echo "::set-output name=name::$([String]::Format("{0}-{1}.txt",'version', '${{env.SolutionName}}'))"
         
       - name: Save Remote Version File Path
         id: RemoteVersionFilePath
-        run: echo "::set-output name=name::$([String]::Format("{0}/{1}", '${{env.RemoteRootPath}}','version.txt'))"
+        run: echo "::set-output name=name::$([String]::Format("{0}/{1}", '${{env.RemoteRootPath}}','${{steps.RemoteVersionFileName.outputs.name}}'))"
+     
+      - name: Save Version File URL 
+        id: VerisonURL
+        run: echo "::set-output name=name::$([String]::Format("{0}/{1}", '${{secrets.VERSION_FILE_URL}}','${{steps.RemoteVersionFileName.outputs.name}}'))"
 
-     # 更新地址
+     # APP 更新地址
       - name: Save Update Url
         id: InstallUrl
         run: echo "::set-output name=url::$([String]::Format("${{secrets.APP_UPDATE_URL_ROOT}}/update/{0}/{1}/", '${{steps.solution.outputs.name}}', 'developer'))"
@@ -99,7 +108,7 @@ jobs:
       
       # 获取远程版本文件
       - name: Get Remote Version File
-        run: Invoke-WebRequest -Uri ${{secrets.VERSION_FILE_URL}} -OutFile ./version.txt
+        run: Invoke-WebRequest -Uri ${{steps.VerisonURL.outputs.name}} -OutFile ./version.txt
           
       - name: Read Remote Version File
         id: RemoteVersionFile
@@ -171,7 +180,7 @@ jobs:
         with:
           # copy-res.bat： 复制最新版本的资源到更新目录 && 维持版本文件夹个数
           #  1: 项目的名字 2.发布的目录 3.最新发布的文件夹名 4.版本文夹最多文件个数
-          command: powershell cd /;cd ${{env.RemoteScriptRoot}};.\copy-res.bat ${{steps.solution.outputs.name}} developer ${{steps.folder.outputs.name}} ${{env.MaxFolders}}
+          command: powershell cd /;cd ${{env.RemoteScriptRoot}};.\copy-res.bat ${{steps.solution.outputs.name}} developer ${{steps.folder.outputs.name}} ${{env.MaxFolders}} ${{steps.RemoteVersionFilePath.outputs.name}}
           host: ${{secrets.SSH_HOST}}
           port: ${{secrets.SSH_PORT}}
           username: ${{secrets.SSH_USER_NAME}}
