@@ -44,7 +44,7 @@ jobs:
         - name: Dump matrix context
           run: echo '${{ toJSON(matrix) }}'
         - name: echo file change
-          run: echo '$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})'
+          run: echo '${{git diff-tree --no-commit-id --name-only -r ${{ github.sha }}}}'
         
 
         ## 获取远程版本文件
