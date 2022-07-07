@@ -44,7 +44,7 @@ jobs:
         - name: Dump matrix context
           run: echo '${{ toJSON(matrix) }}'
         - name: echo file change
-          run: echo '${{git show }}'
+          run: git show
         
 
         ## 获取远程版本文件
