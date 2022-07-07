@@ -60,8 +60,9 @@ jobs:
           env:
               INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           with:
-             text: '${{steps.RemoteVersionFile.outputs.content}}'
+             text: 'AAAA\n BBBB\n'
              
+             # ${{steps.RemoteVersionFile.outputs.content}}
         
         
 
