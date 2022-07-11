@@ -34,6 +34,8 @@ jobs:
           with:
             fetch-depth: 0
 
+        - name: pwd
+          run: cd ./.github/workflows/;dir;
         - name: call workflow
           uses: ./.github/workflows/dev.yml
 
