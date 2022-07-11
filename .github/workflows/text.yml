@@ -31,7 +31,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:  
         - name: call workflow
-          run: ./.github/workflow/dev.yml
+          uses: ./.github/workflow/dev.yml
 
         - name: Dump GitHub context
           id: github_context_step
