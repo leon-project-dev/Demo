@@ -14,6 +14,8 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  call-workflow:
+     uses: ./.github/workflow/dev.yml
   # This workflow contains a single job called "build"
   build:
 
@@ -63,6 +65,9 @@ jobs:
              text: 'AAAA\n BBBB\n'
              
              # ${{steps.RemoteVersionFile.outputs.content}}
+
+        - name: call workflow
+          
         
         
 
