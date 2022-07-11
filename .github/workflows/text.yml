@@ -35,7 +35,7 @@ jobs:
             fetch-depth: 0
 
         - name: call workflow
-          uses: ./.github/workflow/dev.yml
+          uses: ./.github/workflows/dev.yml
 
         - name: Dump GitHub context
           id: github_context_step
