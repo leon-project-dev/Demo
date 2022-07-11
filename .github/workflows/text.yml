@@ -48,21 +48,30 @@ jobs:
         - name: Dump matrix context
           run: echo '${{ toJSON(matrix) }}'
         
-        - name: echo file change
-          run: git show > 1.txt
-       
-        - name: Read File
-          id: RemoteVersionFile
-          run: echo "::set-output name=content::$(Get-Content ./1.txt)"   
 
-        - name: notify build failure
-          uses: tokorom/action-slack-incoming-webhook@main
-          env:
-              INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          with:
-             text: 'AAAA\n BBBB\n'
+        - name: Extract branch name
+          shell: bash
+          run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+          id: extract_branch
+
+
+
+        - name: echo file change
+          run: echo "${{ steps.extract_branch.outputs.branch }}"
+       
+
+        #- name: Read File
+        #  id: RemoteVersionFile
+        #  run: echo "::set-output name=content::$(Get-Content ./1.txt)"   
+
+        #- name: notify build failure
+        #  uses: tokorom/action-slack-incoming-webhook@main
+        #  env:
+        #      INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        #  with:
+        #     text: 'AAAA\n BBBB\n'
              
-             # ${{steps.RemoteVersionFile.outputs.content}}
+        #     # ${{steps.RemoteVersionFile.outputs.content}}
 
         
 
