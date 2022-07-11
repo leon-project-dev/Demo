@@ -30,9 +30,8 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:  
-        - uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
+        - name: call workflow
+          run: ./.github/workflow/dev.yml
 
         - name: Dump GitHub context
           id: github_context_step
@@ -64,8 +63,7 @@ jobs:
              
              # ${{steps.RemoteVersionFile.outputs.content}}
 
-        - name: call workflow
-          uses: ./.github/workflow/dev.yml
+        
         
         
 
