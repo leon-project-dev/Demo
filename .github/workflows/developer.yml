@@ -146,10 +146,10 @@ jobs:
       
       # 清空项目
       - name: Clean 
-        run: msbuild $env:SolutionName /t:clean
+        run:  msbuild $env:SolutionName /t:clean
      
       # 删除发布目录
-      - name: Delete puc dir
+      - name: Delete pub dir
         run: rm -r pub
 
       # 指定版本号，输出目录，更新地址

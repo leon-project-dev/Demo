@@ -33,12 +33,7 @@ jobs:
         - uses: actions/checkout@v3
           with:
             fetch-depth: 0
-
-        - name: pwd
-          run: cd ./.github/workflows/;dir;
-        - name: call workflow
-          uses: ./.github/workflows/dev
-
+            
         - name: Dump GitHub context
           id: github_context_step
           run: echo '${{ toJSON(github) }}'
