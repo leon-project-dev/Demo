@@ -56,10 +56,13 @@ jobs:
 
 
 
-        - name: echo file change
-          run: echo "${{ steps.extract_branch.outputs.branch }}"
+          # ("AAABDDDD") -Replace 'B', 'PowerShell'
+        - name: formate message
+          id: FormatMsg  
+          run: echo "::set-output content=msg::$(("AABBCC") -Replace 'BB', ' PowerShell ')"
        
-
+        - name: echo msg
+          run: echo "${{steps.FormatMsg.outputs.content}}"
         #- name: Read File
         #  id: RemoteVersionFile
         #  run: echo "::set-output name=content::$(Get-Content ./1.txt)"   
