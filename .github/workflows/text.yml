@@ -59,7 +59,7 @@ jobs:
           # ("AAABDDDD") -Replace 'B', 'PowerShell'
         - name: formate message
           id: FormatMsg  
-          run: echo "::set-output content=msg::$(("AABBCC") -Replace 'BB', ' PowerShell ')"
+          run: echo "::set-output content=msg::'$(("AABBCC") -Replace 'BB', ' PowerShell ')'"
        
         - name: echo msg
           run: echo "${{steps.FormatMsg.outputs.content}}"
