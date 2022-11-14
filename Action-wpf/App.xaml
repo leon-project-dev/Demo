@@ -1,9 +1,279 @@
-﻿<Application x:Class="Action_wpf.App"
+﻿<Application x:Class="ActionWpf.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Action_wpf"
-             StartupUri="MainWindow.xaml">
+             xmlns:local="clr-namespace:ActionWpf" 
+             xmlns:Controls="clr-namespace:ActionWpf.Controls" 
+             xmlns:Common="clr-namespace:ActionWpf.Common"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
     <Application.Resources>
-         
+
+        <Color x:Key="UiMaskHoverColor">#B0CCCCCC</Color>
+        <SolidColorBrush x:Key="UiMaskHoverBrush" Color="{DynamicResource UiMaskHoverColor}"></SolidColorBrush>
+        <Color x:Key="UiMaskCheckedColor">#FF32617A</Color>
+        <SolidColorBrush x:Key="UiMaskCheckedBrush" Color="{DynamicResource UiMaskCheckedColor}"></SolidColorBrush>
+
+        <local:DisplayModeToVisibleConverter x:Key="DisplayModeToVisibleConverter"></local:DisplayModeToVisibleConverter>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid ToolTip="{Binding DisplayName}" Background="Transparent">
+                            <Border x:Name="Border"  
+                                    SnapsToDevicePixels ="True"
+                                    CornerRadius ="{Binding CornerRadius}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"                                 
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Background="{TemplateBinding Background}"/>
+                            <Grid Opacity="{TemplateBinding Opacity}" >
+                                <Grid Margin="5,3,5,3" >
+                                    <Image Source="{Binding Icon}" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Image.Visibility>
+                                            <MultiBinding Converter="{StaticResource DisplayModeToVisibleConverter}">
+                                                <Binding Path="DisplayMode"></Binding>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <local:DisplayMode>Icon</local:DisplayMode>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </Image.Visibility>
+                                    </Image>
+                                    <TextBlock Text="{Binding DisplayName}" 
+                                           HorizontalAlignment="Center"
+                                           TextWrapping="NoWrap"
+                                           TextTrimming="CharacterEllipsis"
+                                           TextAlignment="{Binding DisplayTextAlign}" 
+                                           VerticalAlignment="Center" 
+                                           Width="{Binding DisplayLen}">
+                                        <TextBlock.Visibility>
+                                            <MultiBinding Converter="{StaticResource DisplayModeToVisibleConverter}">
+                                                <Binding Path="DisplayMode"></Binding>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <local:DisplayMode>Content</local:DisplayMode>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </TextBlock.Visibility>
+                                    </TextBlock>
+                                    <DockPanel>
+                                        <Image Source="{Binding Icon}" Margin="0" DockPanel.Dock="{Binding IconDock}"></Image>
+                                        <TextBlock Text="{Binding DisplayName}" 
+                                               Margin="3,0,3,0" 
+                                               TextAlignment="{Binding DisplayTextAlign}" 
+                                               TextWrapping="NoWrap"
+                                               TextTrimming="CharacterEllipsis"
+                                               HorizontalAlignment="Center" 
+                                               VerticalAlignment="Center" 
+                                               Width="{Binding DisplayLen}"></TextBlock>
+                                        <DockPanel.Visibility>
+                                            <MultiBinding Converter="{StaticResource DisplayModeToVisibleConverter}">
+                                                <Binding Path="DisplayMode"></Binding>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <local:DisplayMode>ContentAndIcon</local:DisplayMode>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </DockPanel.Visibility>
+                                    </DockPanel>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.7"></Setter>
+                                <!--<Setter Property="Background" TargetName="Border" Value="#1A1A1A1A"></Setter>-->
+                            </Trigger>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"></Setter>
+                                <Setter TargetName="Border"  Property="Background" Value="{StaticResource UiMaskHoverBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ToggleButtonStyle" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid ToolTip="{Binding DisplayName}">
+                            <Border x:Name="Border"    
+                                    SnapsToDevicePixels ="{TemplateBinding SnapsToDevicePixels}"
+                                    CornerRadius ="{Binding CornerRadius}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"                                 
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Background="{TemplateBinding Background}"/>
+                            <Border x:Name="Border_Up"    
+                                    SnapsToDevicePixels ="{TemplateBinding SnapsToDevicePixels}"
+                                    CornerRadius ="{Binding CornerRadius}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"                                 
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Background="{TemplateBinding Background}"/>
+                            <Grid Opacity="{TemplateBinding Opacity}" >
+                                <Grid Margin="5,3,5,3" >
+                                    <Image Source="{Binding Icon}" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Image.Visibility>
+                                            <MultiBinding Converter="{StaticResource DisplayModeToVisibleConverter}">
+                                                <Binding Path="DisplayMode"></Binding>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <local:DisplayMode>Icon</local:DisplayMode>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </Image.Visibility>
+                                    </Image>
+                                    <TextBlock Text="{Binding DisplayName}" 
+                                           HorizontalAlignment="Center" 
+                                           VerticalAlignment="Center" 
+                                           TextWrapping="NoWrap"
+                                           TextTrimming="CharacterEllipsis"
+                                           TextAlignment="{Binding DisplayTextAlign}" 
+                                           Width="{Binding DisplayLen}">
+                                        <TextBlock.Visibility>
+                                            <MultiBinding Converter="{StaticResource DisplayModeToVisibleConverter}">
+                                                <Binding Path="DisplayMode"></Binding>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <local:DisplayMode>Content</local:DisplayMode>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </TextBlock.Visibility>
+                                    </TextBlock>
+                                    <DockPanel>
+                                        <Image Source="{Binding Icon}" Margin="0" DockPanel.Dock="{Binding IconDock}"></Image>
+                                        <TextBlock Text="{Binding DisplayName}" 
+                                               Margin="3,0,3,0" 
+                                               TextAlignment="{Binding DisplayTextAlign}" 
+                                               TextWrapping="NoWrap"
+                                               TextTrimming="CharacterEllipsis"
+                                               HorizontalAlignment="Center" 
+                                               VerticalAlignment="Center" 
+                                               Width="{Binding DisplayLen}"></TextBlock>
+                                        <DockPanel.Visibility>
+                                            <MultiBinding Converter="{StaticResource DisplayModeToVisibleConverter}">
+                                                <Binding Path="DisplayMode"></Binding>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <local:DisplayMode>ContentAndIcon</local:DisplayMode>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </DockPanel.Visibility>
+                                    </DockPanel>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.7"></Setter>
+                            </Trigger>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"></Setter>
+                                <Setter TargetName="Border"  Property="Background" Value="{StaticResource UiMaskHoverBrush}" />
+                                <Setter TargetName="Border_Up"  Property="Background" Value="{StaticResource UiMaskHoverBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Border"  Property="Background" Value="{StaticResource UiMaskCheckedBrush}" />
+                                <Setter TargetName="Border_Up"  Property="Background" Value="{StaticResource UiMaskCheckedBrush}" />
+                                <Setter Property="Foreground" Value="White"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Controls:InnerShadowBox">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Controls:InnerShadowBox">
+                        <Grid x:Name="Root" Clip="{Binding ElementName=GeometryCreator, Path=Result}">
+                            <Common:GeometryCreator x:Name="GeometryCreator"
+                                                CornerRadius="{TemplateBinding CornerRadius}"
+                                                GeometryHeight="{Binding ActualHeight, ElementName=Root}"
+                                                GeometryWidth="{Binding ActualWidth, ElementName=Root}" />
+                            <Grid>
+                                <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" />
+                                <Grid Effect="{TemplateBinding InnerShadowEffect}">
+                                    <Grid>
+                                        <Grid.Clip>
+                                            <CombinedGeometry Geometry1="{Binding ElementName=GeometryCreator, Path=Result}" GeometryCombineMode="Xor">
+                                                <CombinedGeometry.Geometry2>
+                                                    <RectangleGeometry Rect="-5000,-5000,10000,10000" />
+                                                </CombinedGeometry.Geometry2>
+                                            </CombinedGeometry>
+                                        </Grid.Clip>
+                                        <Rectangle Margin="-64" Fill="White" />
+                                    </Grid>
+                                </Grid>
+                                <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                </Border>
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Controls:NeuomorphismBox">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="#e0e0e0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Controls:NeuomorphismBox">
+                        <Grid x:Name="Root">
+
+                            <Grid>
+
+                                <Grid x:Name="ShadowElements">
+                                    <Border Background="{Binding TemplateSettings.Background, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                        CornerRadius="{TemplateBinding CornerRadius}"
+                                        Effect="{Binding TemplateSettings.LightShadowEffect, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+
+                                    <Border Background="{Binding TemplateSettings.Background, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                        CornerRadius="{TemplateBinding CornerRadius}"
+                                        Effect="{Binding TemplateSettings.DarkShadowEffect, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Grid>
+                                <Border Background="{Binding TemplateSettings.Background, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="{TemplateBinding CornerRadius}" />
+
+                                <Grid x:Name="InnerShadowElements" Visibility="Collapsed">
+                                    <Controls:InnerShadowBox CornerRadius="{TemplateBinding CornerRadius}" InnerShadowEffect="{Binding TemplateSettings.LightShadowEffect, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    <Controls:InnerShadowBox CornerRadius="{TemplateBinding CornerRadius}" InnerShadowEffect="{Binding TemplateSettings.DarkShadowEffect, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Grid>
+
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Shape" Value="Pressed">
+                                <Setter TargetName="InnerShadowElements" Property="Visibility" Value="Visible" />
+                                <Setter TargetName="ShadowElements" Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

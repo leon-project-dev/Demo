@@ -1,19 +1,312 @@
-﻿<Window x:Class="Action_wpf.MainWindow"
+﻿<Window x:Class="ActionWpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Action_wpf"
+        xmlns:local="clr-namespace:ActionWpf" 
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+        xmlns:dxci="http://schemas.devexpress.com/winfx/2008/xaml/core/internal" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+        xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" 
+        xmlns:dxprg="http://schemas.devexpress.com/winfx/2008/xaml/propertygrid"
+        
+        xmlns:local1="clr-namespace:ActionWpf.Behaviors" xmlns:controls="clr-namespace:ActionWpf.Controls" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:dxco="http://schemas.devexpress.com/winfx/2008/xaml/controls" xmlns:Images="clr-namespace:DevExpress.Xpf.Controls;assembly=DevExpress.Xpf.Controls.v22.1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="480" Width="501" LocationChanged="Window_LocationChanged">
+        Title="" Height="500" Width="800"  >
+    <Window.Resources>
+        <Style TargetType="ProgressBar">
+            <!--<Setter Property="Width" Value="50" />
+            <Setter Property="Height" Value="200" />-->
+            <Setter Property="Maximum" Value="1" />
+            <!--<Setter Property="Foreground" Value="#36a8e2" />-->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Grid Width="{TemplateBinding Width}"
+                                  Height="{TemplateBinding Height}"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center">
+                            <Grid.Resources>
+                                <Style TargetType="Rectangle">
+                                    <Setter Property="Fill"
+                                                Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ProgressBar}}" />
+                                    <Setter Property="RadiusX" Value="25" />
+                                    <Setter Property="RadiusY" Value="5" />
+                                </Style>
+                            </Grid.Resources>
+                            <Grid x:Name="Root" Margin="0,5" />
+                            <Rectangle Opacity="0.2" />
+
+                            <Rectangle Height="10"
+                                           VerticalAlignment="Top"
+                                           Opacity="0.1" />
+                            <Rectangle Margin="0,0,0,1" VerticalAlignment="Bottom">
+                                <dxmvvm:Interaction.Behaviors>
+                                    <local1:ProgressToHeightBehavior BasedElement="{Binding ElementName=Root}"
+                                                                         Progress="{Binding Value, RelativeSource={RelativeSource AncestorType=ProgressBar}}" />
+                                </dxmvvm:Interaction.Behaviors>
+                            </Rectangle>
+
+                            <Grid VerticalAlignment="Bottom">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="10" />
+                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <dxmvvm:Interaction.Behaviors>
+                                        <local1:ProgressToHeightBehavior BasedElement="{Binding ElementName=Root}"
+                                                                             Progress="{Binding Value, RelativeSource={RelativeSource AncestorType=ProgressBar}}" />
+                                    </dxmvvm:Interaction.Behaviors>
+                                </Grid>
+                                <Rectangle Grid.RowSpan="2" />
+                            </Grid>
+
+                            <Rectangle Opacity="0.6">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,.5">
+                                        <GradientStop Color="Black" />
+                                        <GradientStop Offset="1" Color="Transparent" />
+                                        <GradientStop Offset="0.6" Color="#41000000" />
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+
+                            <Grid VerticalAlignment="Bottom">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="5" />
+                                </Grid.RowDefinitions>
+                                <Grid Margin="0,0,0,5">
+                                    <dxmvvm:Interaction.Behaviors>
+                                        <local1:ProgressToHeightBehavior BasedElement="{Binding ElementName=Root}"
+                                                                             Progress="{Binding Value, RelativeSource={RelativeSource AncestorType=ProgressBar}}" />
+                                    </dxmvvm:Interaction.Behaviors>
+                                </Grid>
+                                <Rectangle Grid.RowSpan="2"
+                                               Height="10"
+                                               VerticalAlignment="Top" />
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="150"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Background="Gainsboro"></Grid>
-        <Grid Grid.Column="1" Background="Green"></Grid>
-        <Grid Grid.Column="2" Background="Red"></Grid>
+        
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="5"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="90"></RowDefinition>
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                    <ToggleButton Name="WaitQueueToggleBtn"                                   
+                                  DataContext="{Binding WaitQueueVM}" 
+                                  Style="{DynamicResource ToggleButtonStyle}" 
+                                  Width="90" 
+                                  BorderThickness="2"
+                                  Checked="WaitQueueToggleBtn_Checked"                                   
+                                  Margin="5,0,5,0" ></ToggleButton>
+                    <ToggleButton x:Name="HotFileToggleBtn" 
+                                  DataContext="{Binding HotFileVM}"
+                                  Style="{DynamicResource ToggleButtonStyle}" 
+                                  Checked="HotFileToggleBtn_Checked" 
+                                  Content="热文件" 
+                                  Width="90" 
+                                  BorderThickness="2"
+                                  Margin="0,0,5,0"></ToggleButton>
+                    <ToggleButton x:Name="MaterialToggleBtn" 
+                                  DataContext="{Binding MaterialVM}"
+                                  Style="{DynamicResource ToggleButtonStyle}" 
+                                  Checked="MaterialToggleBtn_Checked" 
+                                  Content="材料" 
+                                  Width="90" 
+                                  BorderThickness="2"
+                                  Margin="0,0,5,0"></ToggleButton>
+                    <ToggleButton x:Name="ProtectToggleBtn" 
+                                  DataContext="{Binding ProtectVM}"
+                                  Style="{DynamicResource ToggleButtonStyle}" 
+                                  Checked="ProtectToggleBtn_Checked" 
+                                  Content="维护" 
+                                  Width="90" 
+                                  BorderThickness="2"
+                                  Margin="0,0,5,0"></ToggleButton>
+                    <ToggleButton x:Name="SettingToggleBtn" 
+                                  DataContext="{Binding SettingVM}"
+                                  Style="{DynamicResource ToggleButtonStyle}" 
+                                  Checked="SettingToggleBtn_Checked" 
+                                  Content="设置" 
+                                  Width="90" 
+                                  BorderThickness="2"
+                                  Margin="0,0,5,0"></ToggleButton>
+                </StackPanel>
+                <DockPanel DockPanel.Dock="Right">
+                    <Button Width="50" 
+                            Margin="0,0,5,0" 
+                            DataContext="{Binding LoginVM}"
+                            Style="{DynamicResource ButtonStyle}"
+                            DockPanel.Dock="Right" 
+                            BorderThickness="0" 
+                            HorizontalAlignment="Right" 
+                            Background="Transparent">
+                    </Button>
+                    <Button Width="50" 
+                            Margin="0,0,5,0" 
+                            DockPanel.Dock="Right" 
+                            BorderThickness="0" 
+                            HorizontalAlignment="Right" 
+                            DataContext="{Binding ReduceVM}"
+                            Style="{DynamicResource ButtonStyle}"
+                            Background="Transparent">
+                    </Button>
+                    <Button Width="50" 
+                            Margin="0,0,5,0" 
+                            DataContext="{Binding ProjectVM}"
+                            Style="{DynamicResource ButtonStyle}"
+                            DockPanel.Dock="Right" 
+                            BorderThickness="0" 
+                            HorizontalAlignment="Right" 
+                            Background="Transparent">
+                        
+                    </Button>
+                </DockPanel>
+            </DockPanel>
+            <dxg:GridControl Grid.Row="2" Name="_GridControl" >
+                <dxg:GridControl.Columns>
+                    <dxg:GridColumn Header="图片" FieldName="Picture" Width="Auto" >
+                        <dxg:GridColumn.CellDisplayTemplate>
+                            <DataTemplate>
+                                <Image Width="60" Height="60" Source="{Binding Row.Picture}"></Image>
+                            </DataTemplate>
+                        </dxg:GridColumn.CellDisplayTemplate>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn Header="当前打印作业" FieldName="Job" Width="Auto"></dxg:GridColumn>
+                    <dxg:GridColumn Header="#" FieldName="Notes" Width="Auto"></dxg:GridColumn>
+                    <dxg:GridColumn Header="尺寸" FieldName="Size" Width="Auto"></dxg:GridColumn>
+                    <dxg:GridColumn Header="状态" FieldName="Status" Width="*"></dxg:GridColumn>
+                </dxg:GridControl.Columns>
+                <dxg:GridControl.View>
+                    <dxg:TableView ShowGroupPanel="False" AllowEditing="False" >
+                        
+                    </dxg:TableView>
+                </dxg:GridControl.View>
+            </dxg:GridControl>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="5"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="90"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Image Grid.Row="0" Source="/Res/Image/icon.jpg"></Image>
+            <ScrollViewer Grid.Row="2">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Vertical" Margin="0,0,0,30">
+                        <Button Width="90" 
+                                BorderThickness="2" 
+                                Content="开始打印" 
+                                DataContext="{Binding StartPrintVM}"
+                                Style="{DynamicResource ButtonStyle}" 
+                                Height="50" 
+                                Margin="0,0,0,5"></Button>
+                        <Button Width="90" 
+                                BorderThickness="2"  
+                                DataContext="{Binding PrintAginVM}"
+                                Style="{DynamicResource ButtonStyle}"                                 
+                                Height="50" 
+                                Margin="0,0,0,5"></Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="0,0,0,30">
+                        <Button Width="90" 
+                                BorderThickness="2"                                  
+                                DataContext="{Binding SelectedAllVM}"
+                                Style="{DynamicResource ButtonStyle}" 
+                                Height="50" 
+                                Margin="0,0,0,5"></Button>
+                        <Button Width="90" 
+                                BorderThickness="2"  
+                                DataContext="{Binding CancelSelectedVM}"
+                                Style="{DynamicResource ButtonStyle}"                                 
+                                Height="50" 
+                                Margin="0,0,0,5"></Button>
+                        <Button Width="90" 
+                                BorderThickness="2"  
+                                DataContext="{Binding DeleteVM}"
+                                Style="{DynamicResource ButtonStyle}"                                 
+                                Height="50" 
+                                Margin="0,0,0,5"></Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+                        <Button Width="80" Content="页眉开" Height="50" Margin="0,0,0,5"></Button>
+                        <Button Width="80" Content="打印信息" Height="50" Margin="0,0,0,5"></Button>
+                        <Button Width="80" Content="作业间距" Height="50" Margin="0,0,0,5"></Button>
+                        <Button Width="80" Content="重新排列" Height="50" Margin="0,0,0,5"></Button>
+                        <Button Width="80" Content="追标检测" Height="50" Margin="0,0,0,5"></Button>
+                        <Button Width="80" Content="退回材料" Height="50" Margin="0,0,0,5"></Button>
+                        <Button Width="80" Content="启用引线" Height="50" Margin="0,0,0,5"></Button>
+                        <!--<ProgressBar Value=".7"  />-->
+                        
+                    </StackPanel>
+                    
+                </StackPanel>
+            </ScrollViewer>
+            <StackPanel Grid.Row="3">
+                
+            </StackPanel>
+        </Grid>
+        
+        
+        <!--<controls:NeuomorphismBox Margin="10,0,0,0" Width="100"
+                                                  Height="50"
+                                                  HorizontalAlignment="Left"
+                                                  CornerRadius="35"                                                                                                   
+                                                  Distance="5"
+                                                  Intensity="8"
+                                                  Blur="20"
+                                                  LightSource="TopLeft"
+                                                  Shape="Flat"
+                                                  Color="Gainsboro">
+
+        </controls:NeuomorphismBox>-->
+        <Button Name="cmButton" Height="30">
+            Button with Context Menu
+            <Button.ContextMenu>
+                <ContextMenu Name="cm" StaysOpen="true">
+                    <MenuItem Header="File"/>
+                    <MenuItem Header="Save"/>
+                    <MenuItem Header="SaveAs"/>
+                    <MenuItem Header="Recent Files">
+                        <MenuItem Header="ReadMe.txt"/>
+                        <MenuItem Header="Schedule.xls"/>
+                    </MenuItem>
+                </ContextMenu>
+            </Button.ContextMenu>
+        </Button>
+        <avalonEdit:TextEditor xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                               Name="TextEditor"
+                               Visibility="Hidden"
+                               SyntaxHighlighting="C#"
+                               FontFamily="Consolas"
+                               FontSize="10pt"
+                               LineNumbersForeground="Black" 
+                               ShowLineNumbers="True">
+            <avalonEdit:TextEditor.Options>
+                <avalonEdit:TextEditorOptions ShowSpaces="True" >
+                    <avalonEdit:TextEditorOptions.ColumnRulerPosition>
+                        <system:Int32>10</system:Int32>
+                    </avalonEdit:TextEditorOptions.ColumnRulerPosition>
+                </avalonEdit:TextEditorOptions>
+            </avalonEdit:TextEditor.Options>
+        </avalonEdit:TextEditor>
     </Grid>
+    
+
 </Window>
