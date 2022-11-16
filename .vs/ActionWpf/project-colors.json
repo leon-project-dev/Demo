@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "5bd70fc3-e99b-44a1-ac3c-e15d474e724d": {
+      "ProjectGuid": "5bd70fc3-e99b-44a1-ac3c-e15d474e724d",
+      "DisplayName": "ActionWpf",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "杂项文件",
+      "ColorIndex": -1
+    },
+    "8505dfa8-7f96-40ad-96e1-f9b42d5fafcd": {
+      "ProjectGuid": "8505dfa8-7f96-40ad-96e1-f9b42d5fafcd",
+      "DisplayName": "DragDropTest",
+      "ColorIndex": 1
+    },
+    "1996ea79-15c1-4e50-9dfd-27538d301fcf": {
+      "ProjectGuid": "1996ea79-15c1-4e50-9dfd-27538d301fcf",
+      "DisplayName": "CollectionChanged",
+      "ColorIndex": 2
+    },
+    "a2e5facb-eeb0-4231-930e-2b60efb68dfb": {
+      "ProjectGuid": "a2e5facb-eeb0-4231-930e-2b60efb68dfb",
+      "DisplayName": "InputScope属性",
+      "ColorIndex": 3
+    },
+    "144670cb-6396-488c-a76d-2e03a3b69e78": {
+      "ProjectGuid": "144670cb-6396-488c-a76d-2e03a3b69e78",
+      "DisplayName": "WPFComamnd",
+      "ColorIndex": 4
+    },
+    "67eefbc6-051c-4a24-8b05-ae9861691159": {
+      "ProjectGuid": "67eefbc6-051c-4a24-8b05-ae9861691159",
+      "DisplayName": "DrawShape",
+      "ColorIndex": 5
+    }
+  },
+  "NextColorIndex": 6
+}

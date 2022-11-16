@@ -56,14 +56,17 @@ if __name__ == "__main__":
 
     verisonPath = sys.argv[1] 
     rootPath = sys.argv[2] 
+    if not os.path.exists(rootPath):
+        os.makedirs(rootPath)
+    
     if not os.path.exists(verisonPath):
         fs = open(verisonPath, "w+")
         fs.write("")
         fs.close()
     else:                                       # 检测之前发布文件是否失败，如果版本文件里面的版本和最新文件夹版本相等，说明没问题，不等说明有问题，需要删掉最新的文件夹
-        fileVerison = GetVersionContent(verisonPath)
+        fileVerison = GetVersionContent(verisonPath)            
         folderVersion = GetNewFolderVersion(rootPath)
-        if fileVerison != folderVersion:
+        if rootPath != "" and folderVersion != "" and fileVerison != folderVersion:
             DeleteNewFolder(rootPath)        
 
     print("!!!run success!!!")    

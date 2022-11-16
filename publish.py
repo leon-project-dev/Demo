@@ -92,13 +92,13 @@ if __name__ == "__main__":
 
     if not os.path.exists(checkDir):
         print(f'{checkDir} not exist, is frist publish')
-        SaveVersion(remoteVersonPath ,"")                                # 当前文件夹目录不存在，说明第一次发布
+        SaveVersion(remoteVersonPath ,"1.0.0.0")                                # 当前文件夹目录不存在，说明第一次发布
     else:
 
         folders = GetFileFolderCount(checkDir)
         if folders == 0:                # 当前夹子没有版本文件，为第一次发布
             print(f'{checkDir} exist, but no child dir, is frist publish')
-            SaveVersion(remoteVersonPath ,"")
+            SaveVersion(remoteVersonPath ,"1.0.0.0")
         else:
             
 
@@ -112,7 +112,7 @@ if __name__ == "__main__":
             mainVesion, revisionVersion = GetVersion(dirName)
 
             # 将主版本和修订版本写到文件中
-            SaveVersion(remoteVersonPath ,f'{mainVesion},{revisionVersion}')    
+            SaveVersion(remoteVersonPath ,f'{mainVesion}.{ ((int)revisionVersion + 1)}')    
             print("!!!run success!!!")
 
 

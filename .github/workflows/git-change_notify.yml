@@ -1,0 +1,96 @@
+# 每次 github 提交都会执行
+
+name: Push Developer CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]   
+    paths-ignore: ["**/*.txt","**/*.md", "LICENSE", "**/*.xmind", "**/*.doc", "**/*.docx", "**/*.yml", "**/*.ymal"]
+  
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+
+    strategy:
+      matrix:
+        configuration: [Debug]
+
+    # The type of runner that the job will run on
+    runs-on: windows-latest    
+    
+    env:
+      Solution_Name: Action-wpf
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:      
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+     
+
+      - name: notify build failure
+        uses: tokorom/action-slack-incoming-webhook@main
+        env:
+             INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+             text: "build failte, check actions log"
+             attachments: |
+                [
+                    {
+                        "color": "good",
+                        "author_name": "${{ github.actor }}",
+                        "author_icon": "${{ github.event.sender.avatar_url }}",                 
+                        "fields": [
+                                        {
+                                            "title": "Commit User",
+                                            "value": "${{ github.event.commits[0].committer.name}}"
+                                        },
+                                        {
+                                            "title": "Commit Message",
+                                            "value": "${{ github.event.commits[0].message }}"
+                                        },
+                                        {
+                                            "title": "GitHub Actions URL",
+                                            "value": "${{ github.event.repository.url }}/actions/runs/${{ github.run_id }}"
+                                        }
+                                ]
+                    }
+                ]
+        if: failure()
+
+      
+      - name: notify build success
+        uses: tokorom/action-slack-incoming-webhook@main
+        env:
+             INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+             text: "build success"
+             attachments: |
+                [
+                    {
+                        "color": "good",
+                        "author_name": "${{ github.actor }}",
+                        "author_icon": "${{ github.event.sender.avatar_url }}",                 
+                        "fields": [
+                                        {
+                                            "title": "Commit User",
+                                            "value": "${{ github.event.commits[0].committer.name}}"
+                                        },
+                                        {
+                                            "title": "Commit Message",
+                                            "value": "${{ github.event.commits[0].message }}"
+                                        },
+                                        {
+                                            "title": "GitHub Actions URL",
+                                            "value": "${{ github.event.repository.url }}/actions/runs/${{ github.run_id }}"
+                                        }
+                                ]
+                    }
+                ]
+
+        if: success()

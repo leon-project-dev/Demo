@@ -1,0 +1,17 @@
+﻿<Window x:Class="DragDropTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DragDropTest" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <dxg:GridControl ItemsSource="{Binding Datas}">
+            <dxg:GridColumn FieldName="Name"></dxg:GridColumn>
+            <dxg:GridControl.View>
+                <dxg:TreeListView AllowDragDrop="True" StartRecordDrag="TreeListView_StartRecordDrag" MouseLeftButtonDown="TreeListView_MouseLeftButtonDown"></dxg:TreeListView>
+            </dxg:GridControl.View>
+        </dxg:GridControl>
+    </Grid>
+</Window>
