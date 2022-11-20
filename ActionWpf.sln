@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CancelLocalTokenTest", "Can
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "線程池等待超時", "線程池等待超時\線程池等待超時.csproj", "{3C9ACABA-111E-488E-AC46-4904D74A0CF2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loaded函數測試", "Loaded函數測試\Loaded函數測試.csproj", "{C106371B-86D5-487F-9CBA-FD42A6675602}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskDemo", "TaskDemo\TaskDemo.csproj", "{0DFFB224-A81D-4C9D-939B-B087258484A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +85,14 @@ Global
 		{3C9ACABA-111E-488E-AC46-4904D74A0CF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C9ACABA-111E-488E-AC46-4904D74A0CF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C9ACABA-111E-488E-AC46-4904D74A0CF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C106371B-86D5-487F-9CBA-FD42A6675602}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C106371B-86D5-487F-9CBA-FD42A6675602}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C106371B-86D5-487F-9CBA-FD42A6675602}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C106371B-86D5-487F-9CBA-FD42A6675602}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DFFB224-A81D-4C9D-939B-B087258484A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DFFB224-A81D-4C9D-939B-B087258484A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DFFB224-A81D-4C9D-939B-B087258484A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DFFB224-A81D-4C9D-939B-B087258484A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
